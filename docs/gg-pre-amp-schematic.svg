@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-labelledby="title desc">
+  <title id="title">GZLOZONE GG-PRE AMP - schematic with photo-identified values</title>
+  <desc id="desc">One channel CF to grounded-grid to CF. Green boxes = confirmed. Yellow = photo-read / inferred - measure before rebuild.</desc>
+
+  <defs>
+    <style type="text/css"><![CDATA[
+      .bg { fill: #f7f4ef; }
+      .card { fill: #fffdf8; stroke: #2a2a2a; stroke-width: 1.2; }
+      .title { font: 700 22px "Segoe UI", sans-serif; fill: #1a1a1a; }
+      .sub { font: 400 12px "Segoe UI", sans-serif; fill: #444; }
+      .lbl { font: 600 13px Consolas, monospace; fill: #1a1a1a; }
+      .sm { font: 400 11px Consolas, monospace; fill: #333; }
+      .val { font: 700 12px Consolas, monospace; fill: #111; }
+      .note { font: 400 11px "Segoe UI", sans-serif; fill: #555; }
+      .wire { fill: none; stroke: #1a1a1a; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+      .rail { fill: none; stroke: #8b1e1e; stroke-width: 2; }
+      .nrail { fill: none; stroke: #1e3a8b; stroke-width: 2; }
+      .gnd { fill: none; stroke: #1a1a1a; stroke-width: 1.6; }
+      .tube { fill: #f0f0f0; stroke: #1a1a1a; stroke-width: 1.5; }
+      .unk { fill: #fff3cd; stroke: #856404; stroke-width: 1.2; stroke-dasharray: 3 2; }
+      .conf { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 1.2; }
+      .mid { fill: #e3f2fd; stroke: #1565c0; stroke-width: 1.2; }
+    ]]></style>
+  </defs>
+
+  <rect class="bg" width="1200" height="900"/>
+
+  <!-- Header / back link (works when opened in a browser) -->
+  <a href="./gg-pre/README.md"><text class="note" x="40" y="22" fill="#1565c0" text-decoration="underline">GG-PRE docs</text></a>
+  <text class="title" x="40" y="48">GZLOZONE / Zero Zone GG-PRE AMP</text>
+  <text class="sub" x="40" y="68">Values from close-up photos - one channel (L/R symmetric) - 3x12AU7 - CF / grounded-grid / CF</text>
+
+  <!-- Power rails -->
+  <line class="rail" x1="60" y1="95" x2="900" y2="95"/>
+  <text class="lbl" x="60" y="88">+200V</text>
+  <line class="nrail" x1="60" y1="680" x2="900" y2="680"/>
+  <text class="lbl" x="60" y="700">-200V</text>
+  <line class="gnd" x1="60" y1="620" x2="620" y2="620"/>
+  <text class="lbl" x="60" y="612">GND</text>
+  <line class="gnd" x1="180" y1="620" x2="180" y2="635"/>
+  <line class="gnd" x1="170" y1="635" x2="190" y2="635"/>
+  <line class="gnd" x1="173" y1="640" x2="187" y2="640"/>
+  <line class="gnd" x1="176" y1="645" x2="184" y2="645"/>
+
+  <!-- Power connector -->
+  <rect class="conf" x="930" y="80" width="230" height="120" rx="6"/>
+  <text class="lbl" x="945" y="102">POWER (C)</text>
+  <text class="sm" x="945" y="122">1  -200V</text>
+  <text class="sm" x="945" y="140">2  +12  heaters</text>
+  <text class="sm" x="945" y="158">3  +200V</text>
+  <text class="sm" x="945" y="176">4  GND</text>
+  <text class="note" x="945" y="192">series vs parallel = ?</text>
+
+  <!-- ========== SIGNAL PATH ========== -->
+
+  <!-- IN -->
+  <rect class="conf" x="40" y="270" width="70" height="48" rx="4"/>
+  <text class="lbl" x="52" y="290">IN-x</text>
+  <text class="sm" x="48" y="308">C silk</text>
+  <line class="wire" x1="110" y1="294" x2="145" y2="294"/>
+
+  <!-- R2 Rin 10k -->
+  <rect class="conf" x="145" y="272" width="78" height="44" rx="3"/>
+  <text class="val" x="158" y="292">10 k</text>
+  <text class="sm" x="152" y="308">R2 ~1W</text>
+  <line class="wire" x1="223" y1="294" x2="250" y2="294"/>
+
+  <!-- Rgrid 100k to GND -->
+  <line class="wire" x1="250" y1="294" x2="250" y2="360"/>
+  <rect class="conf" x="210" y="360" width="80" height="44" rx="3"/>
+  <text class="val" x="225" y="380">50 k</text>
+  <text class="sm" x="218" y="396">R1 ~2W</text>
+  <line class="wire" x1="250" y1="404" x2="250" y2="620"/>
+
+  <!-- continue to CF grid -->
+  <line class="wire" x1="250" y1="294" x2="300" y2="294"/>
+
+  <!-- ===== Input CF ===== -->
+  <rect class="card" x="280" y="180" width="190" height="250" rx="8"/>
+  <text class="lbl" x="295" y="200">Input CF</text>
+  <text class="sm" x="295" y="216">V1(R) / V2(L)  I</text>
+
+  <ellipse class="tube" cx="375" cy="300" rx="52" ry="68"/>
+  <text class="sm" x="350" y="250">P to +200V</text>
+  <line class="wire" x1="375" y1="232" x2="375" y2="95"/>
+  <!-- grid -->
+  <line class="wire" x1="300" y1="294" x2="335" y2="294"/>
+  <line class="wire" x1="335" y1="278" x2="335" y2="310"/>
+  <line class="wire" x1="340" y1="282" x2="340" y2="306"/>
+  <line class="wire" x1="345" y1="286" x2="345" y2="302"/>
+  <text class="sm" x="305" y="284">G</text>
+  <!-- cathode -->
+  <line class="wire" x1="375" y1="368" x2="375" y2="410"/>
+  <text class="sm" x="382" y="395">K</text>
+
+  <!-- Rk_cf -->
+  <rect class="conf" x="335" y="430" width="80" height="44" rx="3"/>
+  <text class="val" x="348" y="450">30 k</text>
+  <text class="sm" x="342" y="466">R5 ~2W</text>
+  <line class="wire" x1="375" y1="474" x2="375" y2="680"/>
+
+  <!-- cathode couple -->
+  <line class="wire" x1="375" y1="410" x2="530" y2="410"/>
+  <text class="sm" x="415" y="402">cathode couple I</text>
+
+  <!-- ===== GG ===== -->
+  <rect class="card" x="500" y="180" width="200" height="250" rx="8"/>
+  <text class="lbl" x="515" y="200">Grounded-grid</text>
+  <text class="sm" x="515" y="216">same bottle as CF  I</text>
+
+  <ellipse class="tube" cx="600" cy="300" rx="52" ry="68"/>
+
+  <!-- Ra_gg 100k -->
+  <rect class="conf" x="560" y="115" width="80" height="44" rx="3"/>
+  <text class="val" x="575" y="135">50 k</text>
+  <text class="sm" x="568" y="151">Ra ~2W I</text>
+  <line class="wire" x1="600" y1="115" x2="600" y2="95"/>
+  <line class="wire" x1="600" y1="159" x2="600" y2="232"/>
+
+  <!-- grid to GND -->
+  <line class="wire" x1="548" y1="294" x2="520" y2="294"/>
+  <line class="wire" x1="520" y1="294" x2="520" y2="620"/>
+  <text class="sm" x="525" y="284">G ~ GND</text>
+  <line class="wire" x1="548" y1="278" x2="548" y2="310"/>
+  <line class="wire" x1="553" y1="282" x2="553" y2="306"/>
+  <line class="wire" x1="558" y1="286" x2="558" y2="302"/>
+
+  <!-- cathode from couple -->
+  <line class="wire" x1="600" y1="368" x2="600" y2="410"/>
+  <line class="wire" x1="530" y1="410" x2="600" y2="410"/>
+
+  <!-- plate to out CF -->
+  <line class="wire" x1="600" y1="200" x2="740" y2="200"/>
+  <line class="wire" x1="740" y1="200" x2="740" y2="294"/>
+
+  <!-- ===== Output CF ===== -->
+  <rect class="card" x="720" y="230" width="200" height="220" rx="8"/>
+  <text class="lbl" x="735" y="250">V3 output CF</text>
+  <text class="sm" x="735" y="266">1/2 center tube  I</text>
+
+  <ellipse class="tube" cx="820" cy="340" rx="48" ry="60"/>
+  <line class="wire" x1="820" y1="280" x2="820" y2="95"/>
+  <text class="sm" x="828" y="300">P to +200V</text>
+  <line class="wire" x1="740" y1="294" x2="780" y2="294"/>
+  <line class="wire" x1="780" y1="278" x2="780" y2="310"/>
+  <line class="wire" x1="785" y1="282" x2="785" y2="306"/>
+  <line class="wire" x1="790" y1="286" x2="790" y2="302"/>
+  <line class="wire" x1="820" y1="400" x2="820" y2="455"/>
+
+  <!-- Cout confirmed -->
+  <rect class="conf" x="780" y="455" width="80" height="48" rx="3"/>
+  <text class="val" x="792" y="475">1.0 uF</text>
+  <text class="sm" x="788" y="492">Cout  C</text>
+  <line class="wire" x1="820" y1="503" x2="820" y2="545"/>
+
+  <!-- Rk_out: 100k strong near OUT; lower series 10k or 120 -->
+  <rect class="conf" x="870" y="400" width="90" height="44" rx="3"/>
+  <text class="val" x="880" y="420">20 k</text>
+  <text class="sm" x="875" y="436">R11 ~1W</text>
+  <line class="wire" x1="820" y1="422" x2="870" y2="422"/>
+  <line class="wire" x1="915" y1="444" x2="915" y2="680"/>
+
+  <!-- Rout lower series ambiguous -->
+  <rect class="conf" x="870" y="500" width="100" height="44" rx="3"/>
+  <text class="val" x="878" y="520">100 k</text>
+  <text class="sm" x="878" y="536">R13 ~1W</text>
+
+  <!-- OUT -->
+  <rect class="conf" x="785" y="545" width="70" height="40" rx="4"/>
+  <text class="lbl" x="795" y="570">OUT-x</text>
+
+  <!-- Cdec -->
+  <rect class="conf" x="100" y="110" width="130" height="50" rx="4"/>
+  <text class="val" x="110" y="130">10 uF / 450V</text>
+  <text class="sm" x="110" y="148">Cdec C (silk 22uF)</text>
+  <line class="wire" x1="165" y1="110" x2="165" y2="95"/>
+  <line class="wire" x1="165" y1="160" x2="165" y2="620"/>
+
+  <!-- Feedback -->
+  <path class="wire" d="M 820 480 C 680 540, 420 540, 300 300" stroke-dasharray="4 3"/>
+  <!-- Center R7-R10 callout -->
+  <rect class="conf" x="930" y="220" width="230" height="130" rx="6"/>
+  <text class="lbl" x="945" y="242">Mid stack R5-R10</text>
+  <text class="val" x="945" y="265">30k 30k | 10k 10k</text>
+  <text class="val" x="945" y="285">3k 3k (R5-R10)</text>
+  <text class="sm" x="945" y="305">5/6 ~2W; 7-10 ~1W</text>
+  <text class="note" x="945" y="330">topology pin map = I</text>
+
+  <!-- Values inventory panel -->
+  <rect class="card" x="40" y="720" width="1120" height="140" rx="8"/>
+  <text class="lbl" x="55" y="745">Photo value inventory (stereo board ~14 resistors)</text>
+
+  <rect class="conf" x="55" y="760" width="14" height="14" rx="2"/>
+  <text class="note" x="75" y="772">Confirmed (body print / silk)</text>
+  <rect class="mid" x="280" y="760" width="14" height="14" rx="2"/>
+  <text class="note" x="300" y="772">Photo band read (medium)</text>
+  <rect class="unk" x="500" y="760" width="14" height="14" rx="2"/>
+  <text class="note" x="520" y="772">Ambiguous / inferred - meter</text>
+
+  <text class="sm" x="55" y="800">C:  Cout 1.0uF Arcotronics MKP 250V~   |   Cdec 10uF/450V EPCOS (silk 22uF-250V)   |   tubes 3x 12AU7</text>
+  <text class="sm" x="55" y="820">R1-14: 50k(x2) 30k(x2) 20k(x2) 10k(x4) 3k(x2) 100k(x2) - user confirmed</text>
+  <text class="sm" x="55" y="840">Power est: R1,R3,R5,R6 ~2W; all others ~1W (by body size)</text>
+  <text class="note" x="55" y="848">Schematic labels are illustrative; see gg-pre-component-id.md for R1-R14 map</text>
+  <a href="./gg-pre/README.md"><text class="note" x="55" y="868" fill="#1565c0" text-decoration="underline">GG-PRE docs</text></a>
+</svg>

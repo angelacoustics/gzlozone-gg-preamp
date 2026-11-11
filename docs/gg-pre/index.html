@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GG-PRE AMP — documentation index</title>
+  <link rel="stylesheet" href="../assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="../assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="../index.html">GG kit build docs</a>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../BUILD.html">Build guide</a>
+      <a href="../marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="../index.html">← Project home</a></p>
+<h1>GG-PRE AMP — documentation index</h1>
+<p><strong>GZLOZONE / Zero Zone GG-PRE AMP</strong> — stereo grounded-grid line stage (<strong>3× 12AU7</strong>). Signal board only: <strong>no on-board HV rectifier</strong>. Powered from <a href="../gg-psu/index.html">GG-PSU</a> (or equivalent).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Marking</strong></td>
+<td><code>GZLOZONE®</code> · <code>ZERO ZONE</code> · <code>GG-PRE AMP</code></td>
+</tr>
+<tr>
+<td><strong>PCB (seller)</strong></td>
+<td>132 × 132 mm</td>
+</tr>
+<tr>
+<td><strong>Supplies required</strong></td>
+<td><strong>±200 V DC</strong>, <strong>+12 V</strong> heaters, <strong>GND</strong> (4-pin screw terminal)</td>
+</tr>
+<tr>
+<td><strong>Topology</strong></td>
+<td>Input CF → grounded-grid gain → output CF (per channel)</td>
+</tr>
+<tr>
+<td><strong>BOM status</strong></td>
+<td><strong>R1–R14</strong> and main caps <strong>confirmed</strong> — <a href="../gg-pre-component-id.html">component ID</a></td>
+</tr>
+</tbody></table>
+<p><strong>Safety:</strong> ±200 V is lethal. Discharge capacitors before probing.</p>
+<p><strong>Building the kit:</strong> <a href="../BUILD.html">BUILD.md</a> (power hookup, tubes, RCA/volume, grounding).</p>
+<hr>
+<h2>Read in this order</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Document</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><a href="../gg-pre-amp-schematic.html">gg-pre-amp-schematic.md</a></td>
+<td>Topology, connectors, netlist, assumptions</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="../gg-pre-amp-schematic.svg">gg-pre-amp-schematic.svg</a></td>
+<td>One-channel drawing with <strong>R1–R14</strong> values</td>
+</tr>
+<tr>
+<td>2b</td>
+<td><a href="../sketches/gg-pre-hand-drawn-one-channel.svg">sketches/gg-pre-hand-drawn-one-channel.svg</a></td>
+<td>Same clone, <strong>pencil-style</strong> layout</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="../gg-pre-component-id.html">gg-pre-component-id.md</a></td>
+<td>Full resistor + capacitor BOM</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="../gg-pre-pcb-reverse-engineering.html">gg-pre-pcb-reverse-engineering.md</a></td>
+<td>Photo-based PCB pass, tube pins, traces</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Connectors (silkscreen <strong>C</strong>)</h2>
+<p><strong>Power</strong> (right edge, top → bottom): <code>−200V</code> · <code>+12</code> · <code>+200V</code> · <code>GND</code></p>
+<p><strong>Audio IN</strong> (top center): <code>IN-R</code> · <code>GND</code> · <code>IN-L</code></p>
+<p><strong>Audio OUT</strong> (bottom center): <code>OUT-R</code> · <code>GND</code> · <code>OUT-L</code></p>
+<hr>
+<h2>Photos</h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Overview component side</td>
+<td><a href="../pcb-photos/component-side.jpg">../pcb-photos/component-side.jpg</a></td>
+</tr>
+<tr>
+<td>Overview solder side</td>
+<td><a href="../pcb-photos/solder-side.jpg">../pcb-photos/solder-side.jpg</a></td>
+</tr>
+<tr>
+<td><strong>R1–R14 numbered</strong></td>
+<td><a href="../pcb-photos/component-side-resistors-numbered.jpg">../pcb-photos/component-side-resistors-numbered.jpg</a></td>
+</tr>
+<tr>
+<td>Detail close-ups</td>
+<td><a href="../pcb-photos/closeups/">../pcb-photos/closeups/</a></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Power hookup (from GG-PSU)</h2>
+<table>
+<thead>
+<tr>
+<th>GG-PRE pin</th>
+<th>From PSU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>+200V</code></td>
+<td>Regulated HV positive</td>
+</tr>
+<tr>
+<td><code>−200V</code></td>
+<td>Regulated HV negative</td>
+</tr>
+<tr>
+<td><code>+12</code></td>
+<td>Filament DC</td>
+</tr>
+<tr>
+<td><code>GND</code></td>
+<td>Common</td>
+</tr>
+</tbody></table>
+<p>Details: <a href="../gg-psu-schematic.html">GG-PSU schematic § Forming ±200 V</a>.</p>
+<hr>
+<h2>Open checks (preamp only)</h2>
+<ol>
+<li>Heater wiring on PCB: series vs parallel (<strong>U</strong> — pins 4/5/9 vs <code>+12</code> / <code>GND</code>).</li>
+<li>Which electrolytic is on <strong>+200 V</strong> vs <strong>−200 V</strong>.</li>
+<li>Optional buzz-out: IN → grids, GG plate → V3, cathode → Cout.</li>
+</ol>
+<hr>
+<h2>Related</h2>
+<ul>
+<li><a href="../marantz-7-vs-gg-reference.html">Marantz 7 vs GG reference</a> (gain/Z map, star ground)</li>
+<li><a href="../gg-psu/index.html">GG-PSU documentation</a></li>
+<li><a href="../index.html">Project README</a></li>
+</ul>
+<p><a href="../index.html">← Project home</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

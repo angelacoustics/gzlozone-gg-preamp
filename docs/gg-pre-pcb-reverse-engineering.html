@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zero Zone / GZLOZONE GG-PRE AMP — Visual Reverse-Engineering Report</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="gg-pre/index.html">← GG-PRE index</a> · <a href="index.html">Project</a></p>
+<h1>Zero Zone / GZLOZONE GG-PRE AMP — Visual Reverse-Engineering Report</h1>
+<p><strong>Board:</strong> GG-PRE AMP only — power from <a href="gg-psu/index.html">GG-PSU</a>.</p>
+<p>Source photos: <a href="./pcb-photos/component-side.jpg">pcb-photos/component-side.jpg</a>, <a href="./pcb-photos/solder-side.jpg">pcb-photos/solder-side.jpg</a>. Photo resolution is ~718×953; color-band and fine-trace reads are limited. Prefer <strong>unknown</strong> over invented values.</p>
+<p><strong>Legend:</strong> CONFIRMED = readable silkscreen / clear visual feature. INFERRED = topology-consistent but not fully traced. UNKNOWN = not determinable from these photos.</p>
+<hr>
+<h2>1. ORIENTATION</h2>
+<h3>How solder-side relates to component-side</h3>
+<ul>
+<li><strong>Best match: horizontal mirror (flip around the vertical axis / “turn like a book page”).</strong><ul>
+<li>Top stays top, bottom stays bottom.</li>
+<li>Left ↔ right swap.</li>
+<li>Evidence: both photos show the same <strong>two-upper / one-lower</strong> tube-socket triangle. That rules out a pure vertical flip (which would put two sockets in the lower half).</li>
+</ul>
+</li>
+<li>After that alignment:<ul>
+<li>Component-side <strong>right-edge power</strong> lands on solder-side <strong>left edge</strong>.</li>
+<li>Component-side <strong>IN-R (left of input block)</strong> lands on solder-side <strong>right</strong> of the top 3-pad row.</li>
+<li>Component-side <strong>OUT-R (left of output block)</strong> lands on solder-side <strong>right</strong> of the bottom 3-pad row.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Caveat:</strong> Some solder-side glare makes the power-pad column easy to mis-side; landmark check is the socket triangle + mounting holes, not glare.</p>
+<h3>Connector positions</h3>
+<table>
+<thead>
+<tr>
+<th>Connector</th>
+<th>Component-side photo</th>
+<th>Solder-side photo (as shot; before remapping)</th>
+<th>After hflip alignment to component</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Audio IN (3-pin)</td>
+<td><strong>Top center</strong></td>
+<td>Top-center 3-pad row</td>
+<td>Top center</td>
+</tr>
+<tr>
+<td>Audio OUT (3-pin)</td>
+<td><strong>Bottom center</strong></td>
+<td>Bottom-center 3-pad row</td>
+<td>Bottom center</td>
+</tr>
+<tr>
+<td>Power (4-pin)</td>
+<td><strong>Right edge</strong></td>
+<td>Appears on <strong>left edge</strong> of as-shot solder photo</td>
+<td>Right edge</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. CONNECTORS</h2>
+<h3>Power — 4-pin green screw terminal (component-side right edge)</h3>
+<p>Silkscreen, <strong>top → bottom</strong> (CONFIRMED from magnified label crop):</p>
+<ol>
+<li><code>-200V</code></li>
+<li><code>+12</code></li>
+<li><code>+200V</code></li>
+<li><code>GND</code></li>
+</ol>
+<p>Notes:</p>
+<ul>
+<li><code>+12</code> is the heater supply label (12AU7 heaters; intended ~12.6 V class supply — exact wiring series vs parallel still uncertain; see §3).</li>
+<li>±200 V are bipolar HV rails.</li>
+</ul>
+<h3>Audio IN — 3-pin green screw terminal (component-side top center)</h3>
+<p>Silkscreen, <strong>left → right</strong> (CONFIRMED from full-board reads):</p>
+<ol>
+<li><code>IN-R</code></li>
+<li><code>GND</code></li>
+<li><code>IN-L</code></li>
+</ol>
+<h3>Audio OUT — 3-pin green screw terminal (component-side bottom center)</h3>
+<p>Silkscreen, <strong>left → right</strong> (CONFIRMED):</p>
+<ol>
+<li><code>OUT-R</code></li>
+<li><code>GND</code></li>
+<li><code>OUT-L</code></li>
+</ol>
+<p>Brand block (bottom-right, CONFIRMED): <code>GZLOZONE ®</code> / <code>ZERO ZONE</code> / <code>GG-PRE AMP</code>.</p>
+<hr>
+<h2>3. TUBE SOCKETS</h2>
+<p>All three sockets silkscreened <strong><code>12AU7</code></strong> (CONFIRMED). No V1/V2/V3 silkscreen numbers visible; positional mapping below.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Position (component-side)</th>
+<th>Near</th>
+<th>Gap / key (component-side)</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>V1</strong></td>
+<td>Top-left</td>
+<td><code>IN-R</code> side</td>
+<td>~<strong>6 o’clock</strong> (pin1/pin9 gap toward board bottom)</td>
+<td>High (socket close-up)</td>
+</tr>
+<tr>
+<td><strong>V2</strong></td>
+<td>Top-right</td>
+<td><code>IN-L</code> / power side</td>
+<td>~<strong>6 o’clock</strong></td>
+<td>High (socket close-up)</td>
+</tr>
+<tr>
+<td><strong>V3</strong></td>
+<td>Center (between I/O, above yellow caps)</td>
+<td>Shared L/R</td>
+<td>~<strong>6 o’clock</strong> in center close-up; some overview reads said <strong>12 o’clock</strong></td>
+<td><strong>Medium</strong> — treat as uncertain if exact clock matters</td>
+</tr>
+</tbody></table>
+<p>Standard 12AU7 pinout used below: <code>1=A1, 2=G1, 3=K1, 4=H, 5=H, 6=A2, 7=G2, 8=K2, 9=Hct</code>.</p>
+<h3>Heater / power-ish thick traces (solder-side)</h3>
+<p><strong>CONFIRMED (visual):</strong></p>
+<ul>
+<li>On each socket, the two pins in the <strong>heater pair region (pins 4 and 5)</strong> sit on / are joined by a <strong>thick silver trace</strong> (common heater bus behavior).</li>
+<li><strong>Pin 9</strong> on each socket has its own connection into another thick rail (not the same short bridge as 4–5).</li>
+<li>Thick rails also fan from the power connector pads into the board (HV / GND / heater distribution).</li>
+</ul>
+<p><strong>INFERRED / uncertain:</strong></p>
+<ul>
+<li>Which heater pin(s) get <code>+12</code> vs <code>GND</code> is <strong>not uniquely resolved</strong> from these photos (conflicting reads of rail polarity).</li>
+<li>If 4+5 are truly shorted and 9 is the return → that is the classic <strong>6.3 V parallel</strong> heater hookup — but the silkscreen says <code>+12</code>, which fits <strong>12.6 V series (4 to 5, 9 unused)</strong> better. <strong>Do not assume either without continuity check.</strong> Mark heater topology <strong>UNKNOWN</strong> beyond “thick traces serve heater pins 4/5/9.”</li>
+</ul>
+<h3>Signal / HV pin associations (solder-side, limited)</h3>
+<p><strong>CONFIRMED-ish (thick vs thin, position only):</strong></p>
+<ul>
+<li>Wide traces toward anode/cathode resistor pads from the <code>+200V</code> / <code>-200V</code> entry region.</li>
+<li>Thin traces from IN pads toward the upper sockets’ <strong>grid-side</strong> pin arcs (pins 2 / 7 region).</li>
+<li>Thin/medium traces from V3 cathode-side region toward the yellow-cap pads / OUT pads.</li>
+</ul>
+<p><strong>UNKNOWN:</strong> Exact pin-by-pin assignment of every grid/anode/cathode net from photos alone (mask, glare, and under-socket routing).</p>
+<hr>
+<h2>4. PASSIVES</h2>
+<h3>Counts (component-side)</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Count</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Resistors (blue 5-band metal-film, axial)</td>
+<td><strong>~13–15</strong> visible</td>
+<td>Automated blue-body detection found ~14 plausible axial bodies; exact count hard at this resolution</td>
+</tr>
+<tr>
+<td>Electrolytic capacitors (large black radial)</td>
+<td><strong>2</strong></td>
+<td>Left and right of center</td>
+</tr>
+<tr>
+<td>Film capacitors (large yellow axial)</td>
+<td><strong>2</strong></td>
+<td>Bottom, flanking OUT</td>
+</tr>
+<tr>
+<td>Other discrete caps</td>
+<td><strong>0 clearly visible</strong></td>
+<td>None confidently identified beyond the four above</td>
+</tr>
+</tbody></table>
+<p>No resistor reference designators (R1, R2…) are legible.</p>
+<h3>Resistors — by location (color reads are fragile)</h3>
+<p>Photo resolution + glare make band reading unreliable. Below: best attempts with confidence. <strong>Do not treat medium/low as BOM truth.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Approx. location</th>
+<th>Best band reading</th>
+<th>Implied value</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Near V1 (vertical, socket-right cluster)</td>
+<td>Blue-Grey-Black-Red-Brown</td>
+<td><strong>68 kΩ 1%</strong></td>
+<td>Medium–High (one clear close-up)</td>
+</tr>
+<tr>
+<td>Second vertical near V1</td>
+<td>Blue-Grey-Black-Red-Brown</td>
+<td><strong>68 kΩ 1%</strong></td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Horizontal below V1</td>
+<td>Brown-Black-Black-Orange-Brown <strong>or</strong> Brown-Black-Black-Red-Brown</td>
+<td><strong>100 kΩ</strong> or <strong>10 kΩ</strong></td>
+<td><strong>Low–Medium</strong> (conflicting crops)</td>
+</tr>
+<tr>
+<td>Near V2 / power (vertical)</td>
+<td>Brown-Black-Black-Red-Brown <strong>or</strong> Red-Red-Black-Orange-Brown <strong>or</strong> Red-Red-Black-Brown-Brown</td>
+<td><strong>10 kΩ</strong> / <strong>220 kΩ</strong> / <strong>2.2 kΩ</strong></td>
+<td><strong>Low</strong> — do not trust</td>
+</tr>
+<tr>
+<td>Horizontal pair left of V3</td>
+<td>Brown-Black-Black-Red-Brown (repeated reads)</td>
+<td><strong>10 kΩ 1%</strong></td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Horizontal pair right of V3</td>
+<td>Brown-Black-Black-Red-Brown</td>
+<td><strong>10 kΩ 1%</strong></td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Additional mid-board horizontals (L/R symmetric)</td>
+<td>Often read as 10 kΩ; some reads 68 kΩ / 100 kΩ</td>
+<td>Unknown set</td>
+<td><strong>Low</strong></td>
+</tr>
+<tr>
+<td>Vertical near yellow OUT caps (L and R, ~2 per side)</td>
+<td>Mixed: 10 kΩ vs 68 kΩ vs 100 kΩ across reads</td>
+<td>Unknown</td>
+<td><strong>Low</strong></td>
+</tr>
+<tr>
+<td>Near power connector (1 vertical)</td>
+<td>Often Brown-Black-Black-Red-Brown</td>
+<td><strong>10 kΩ?</strong></td>
+<td>Low–Medium</td>
+</tr>
+</tbody></table>
+<p><strong>Earlier conflicting overview claims</strong> of many 680 kΩ / 150 kΩ / 22 kΩ parts were <strong>not consistently reproducible</strong> on magnified crops → discarded.</p>
+<h3>Capacitors</h3>
+<table>
+<thead>
+<tr>
+<th>Cap</th>
+<th>Silkscreen</th>
+<th>Body marking (readable)</th>
+<th>Likely function</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Left electrolytic</td>
+<td><code>22UF-250V</code> (CONFIRMED)</td>
+<td>EPCOS; <strong>450V</strong>; part code fragment consistent with <strong>10 µF</strong> (<code>…106…</code>); also <code>US 560V</code> surge-style marking</td>
+<td>Local HV rail reservoir / decouple (which rail = see §5)</td>
+<td>Silkscreen high; body µF medium</td>
+</tr>
+<tr>
+<td>Right electrolytic</td>
+<td>Same footprint style; <code>22UF-250V</code> class marking on board</td>
+<td>EPCOS <strong>450V</strong> (symmetric install)</td>
+<td>Mate of left (other HV rail or same-rail dual mono)</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Left yellow axial</td>
+<td>Outline only</td>
+<td>Reads vary: <strong><code>1.0µF</code></strong> class, <strong>250V</strong> (some crops said 400V) — brand text partially <code>MET…</code> / similar</td>
+<td><strong>OUT-R coupling / DC block</strong> (pad ties toward <code>OUT-R</code>)</td>
+<td>Function high; exact printing medium</td>
+</tr>
+<tr>
+<td>Right yellow axial</td>
+<td>Outline only</td>
+<td>Same family as left</td>
+<td><strong>OUT-L coupling / DC block</strong></td>
+<td>Function high; exact printing medium</td>
+</tr>
+</tbody></table>
+<p><strong>Installed electrolytics do not match silkscreen µF/V exactly</strong> (450 V parts on a <code>22UF-250V</code> legend; body suggests ~10 µF). Report both; do not invent a single “true” design value.</p>
+<hr>
+<h2>5. SIGNAL PATH / TOPOLOGY INFERENCE</h2>
+<h3>Name + rail evidence</h3>
+<ul>
+<li>Board title <strong><code>GG-PRE AMP</code></strong> ⇒ intended <strong>grounded-grid</strong> line preamp family (not a Marantz 7 phono topology despite project name).</li>
+<li><strong>±200 V</strong> bipolar HV + only <strong>two</strong> large electrolytics + <strong>two</strong> output film caps + <strong>three</strong> dual triodes in L/R-symmetric layout is consistent with a direct-coupled CF → GG → CF style line stage.</li>
+</ul>
+<h3>Per-channel path (INFERRED skeleton)</h3>
+<p><strong>Right channel (IN-R → OUT-R):</strong></p>
+<ol>
+<li><code>IN-R</code> → series/grid resistor (value uncertain) → <strong>V1</strong> grid (pin 2 or 7).</li>
+<li><strong>V1</strong> implements the front-end for that channel (very likely <strong>input cathode follower + grounded-grid gain</strong> in one bottle — classic GG-preamp partition — but pin-level CF vs GG assignment is <strong>not photo-proven</strong>).</li>
+<li>Interstage coupling toward <strong>V3</strong> (one triode half).</li>
+<li><strong>V3</strong> half as <strong>output buffer</strong> (cathode-follower strongly suggested by yellow cap from V3 region → <code>OUT-R</code>).</li>
+<li>Yellow film → <code>OUT-R</code>.</li>
+</ol>
+<p><strong>Left channel:</strong> mirror through <strong>V2</strong> + other half of <strong>V3</strong> → other yellow film → <code>OUT-L</code>.</p>
+<h3>Tube-section role hypothesis (INFERRED only)</h3>
+<table>
+<thead>
+<tr>
+<th>Tube</th>
+<th>Role hypothesis</th>
+<th>Basis</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td>Right-channel input CF + GG gain (both triodes)</td>
+<td>Position by IN-R; dual-triode bottle; GG product class</td>
+<td>INFERRED</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Left-channel input CF + GG gain</td>
+<td>Mirror of V1</td>
+<td>INFERRED</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Dual output CF (one triode per channel)</td>
+<td>Center placement; yellow caps at V3→OUT</td>
+<td>INFERRED</td>
+</tr>
+</tbody></table>
+<p>Alternative (less likely from layout): V1/V2 only input CFs, V3 holding both GG stages — <strong>not favored</strong> because V3 sits at the output capacitors.</p>
+<h3>Role of ±200 V and the two electrolytics</h3>
+<ul>
+<li><strong><code>+200V</code>:</strong> plate / B+ supply for gain and CF anodes (INFERRED).</li>
+<li><strong><code>-200V</code>:</strong> cathode-tail / negative rail for CF and/or GG stages, enabling wide bias headroom without huge cathode resistors to ground (INFERRED; common in ±HV GG designs).</li>
+<li><strong>Two electrolytics:</strong> almost certainly <strong>rail decoupling / local reservoirs</strong> on the HV rails (one per rail and/or one per channel side). Polarity silkscreen <code>+</code> is visible near footprints; which can is on +200 vs −200 is <strong>not uniquely confirmed</strong> from these photos (UNKNOWN assignment).</li>
+</ul>
+<h3>Left/right symmetry check</h3>
+<p><strong>CONFIRMED:</strong> Highly symmetric component placement and solder-side routing about the vertical centerline. V3 and the center ground/power spine are shared. Minor asymmetry only where the power connector attaches on the V2 side.</p>
+<hr>
+<h2>6. NETLIST-STYLE CONNECTIONS</h2>
+<h3>CONFIRMED (justified from silkscreen + clear traces/pads)</h3>
+<ol>
+<li>Power pin <code>-200V</code> → enters board on its labeled pad (destination beyond entry: not fully traced).</li>
+<li>Power pin <code>+12</code> → enters board on its labeled pad → participates in heater thick-rail network to V1/V2/V3 heater pins (exact pin map uncertain).</li>
+<li>Power pin <code>+200V</code> → enters board on its labeled pad → thick HV distribution toward electrolytic pads / plate-resistor region.</li>
+<li>Power pin <code>GND</code> → board ground network; also bonded to center pins of IN and OUT blocks (center pads sit on the ground spine).</li>
+<li><code>IN-R</code> / <code>IN-L</code> outer pads → thin traces into upper-socket (V1/V2) resistor/grid area.</li>
+<li>Left yellow film pad pair ↔ <code>OUT-R</code> region (thickish component-side trace to <code>OUT-R</code> pad).</li>
+<li>Right yellow film pad pair ↔ <code>OUT-L</code> region.</li>
+<li>V1 &amp; V2 &amp; V3: heater-region pins <strong>4 and 5</strong> involved in a <strong>common thick heater bus</strong>; <strong>pin 9</strong> on a separate thick heater/return-style rail.</li>
+<li>Electrolytic footprints sit on HV-related thick copper (rail filter role).</li>
+</ol>
+<h3>INFERRED (topology-consistent; not fully visually proven)</h3>
+<ol>
+<li><code>IN-R</code> → Rin → <strong>V1 pin 2 (G1)</strong> (or possibly G2) as input grid.</li>
+<li><code>IN-L</code> → Rin → <strong>V2</strong> corresponding grid.</li>
+<li>Within V1/V2: cathodes of the two triodes coupled for CF→GG drive; GG grid referenced to GND (or AC ground).</li>
+<li>V1 GG plate → couple/drive → <strong>V3</strong> grid (right half); V2 similarly → V3 left half.</li>
+<li><strong>V3 pin 3 (K1)</strong> → left yellow film → <code>OUT-R</code>.</li>
+<li><strong>V3 pin 8 (K2)</strong> → right yellow film → <code>OUT-L</code>.</li>
+<li>Plate loads from <code>+200V</code> through anode resistors to V1/V2/V3 anodes.</li>
+<li>Cathode tails / CCS-like resistors from cathodes toward <code>-200V</code>.</li>
+<li>Electrolytic A from <code>+200V</code> to GND; electrolytic B from <code>-200V</code> to GND (or swapped) — <strong>assignment unknown</strong>.</li>
+</ol>
+<hr>
+<h2>7. UNREADABLE / UNKNOWN</h2>
+<p>Explicit list of what these photos do <strong>not</strong> settle:</p>
+<ol>
+<li><strong>Most resistor values</strong> — 718 px photos + glare; many band reads conflict (10k vs 68k vs 100k vs 220k).</li>
+<li><strong>Resistor reference designators</strong> — none readable.</li>
+<li><strong>Exact heater polarity / series vs parallel wiring</strong> — thick traces confirm heater involvement; <code>+12</code> vs 4–5 short conflict unresolved.</li>
+<li><strong>Which electrolytic is on +200 V vs −200 V.</strong></li>
+<li><strong>Exact installed electrolytic capacitance</strong> — silkscreen <code>22µF</code>; body coding suggests ~<code>10µF</code> 450 V EPCOS.</li>
+<li><strong>Exact yellow-cap print</strong> — ~1.0 µF / ~250 V class, brand string not fully readable.</li>
+<li><strong>Full pin-level netlist</strong> under sockets and under large caps.</li>
+<li><strong>Which V1/V2 triode is CF vs GG</strong> (section A vs B).</li>
+<li><strong>V3 gap clock position</strong> — 6 vs 12 o’clock conflict across reads.</li>
+<li><strong>Any hidden SMD / underside-only parts</strong> — none obvious; not excluded.</li>
+<li><strong>Power resistor wattage</strong> — physical size suggests ≥0.5–1 W class only by eye.</li>
+<li><strong>Off-board PSU details</strong> — board expects already-regulated ±200 V and +12; no on-board rectifier visible on this PCB.</li>
+</ol>
+<hr>
+<h2>Practical next steps (if continuing reverse-engineering)</h2>
+<ol>
+<li>Continuity-map heater pins 4/5/9 to <code>+12</code> and <code>GND</code> with a meter (settles series vs parallel).</li>
+<li>Meter which electrolytic + pad ties to <code>+200V</code> vs <code>-200V</code>.</li>
+<li>Multimeter ohms on each resistor (photo BOM is not trustworthy).</li>
+<li>Buzz out IN → grid, plate → V3 grid, V3 cathode → film → OUT.</li>
+</ol>
+<hr>
+<p><em>Photos inspected: component-side and solder-side of the same GG-PRE AMP board. No manufacturer schematic was located online for cross-check during this pass.</em></p>
+<hr>
+<p><a href="gg-pre/index.html">← GG-PRE index</a> · <a href="index.html">Project</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

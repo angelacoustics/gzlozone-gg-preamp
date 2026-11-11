@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zero Zone GG kit — step-by-step build guide</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="index.html">← Project home</a></p>
+<h1>Zero Zone GG kit — step-by-step build guide</h1>
+<p><strong>GZLOZONE GG-PSU + GG-PRE AMP</strong> with <strong>R20-TS4803A</strong> transformer, <strong>IEC</strong> mains inlet, <strong>Alps</strong> volume control, and <strong>RCA</strong> I/O.</p>
+<p>This is the <strong>workshop document</strong>: follow phases in order, check boxes, fill in <strong>Measured</strong> columns. Schematics and BOM live in linked files — do not skip them when a step says <strong>measure first</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Deep references</th>
+<th>Use when</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="gg-psu/transformer.html">gg-psu/transformer.md</a></td>
+<td>Primary/secondary colours, 230 V strapping</td>
+</tr>
+<tr>
+<td><a href="gg-psu-schematic.html">gg-psu-schematic.md</a></td>
+<td>±200 V strap, PSU connectors</td>
+</tr>
+<tr>
+<td><a href="gg-pre/index.html">gg-pre/README.md</a></td>
+<td>Preamp terminals, tube layout</td>
+</tr>
+<tr>
+<td><a href="marantz-7-vs-gg-reference.html#5-star-grounding-deep-dive">marantz-7-vs-gg-reference.md §5</a></td>
+<td>Star ground theory and kit practice</td>
+</tr>
+</tbody></table>
+<p><strong>Legend:</strong> <strong>C</strong> = confirmed in project docs · <strong>I</strong> = inferred · <strong>U</strong> = you must measure on your hardware.</p>
+<p><strong>Mains (this guide):</strong> <strong>Netherlands / EU — 230 V, 50 Hz</strong> <strong>C</strong> (nominal wall supply). Wire the R20 primary <strong>series</strong> for 230 V (<strong>RED ↔ GRY</strong> tied); <strong>50 Hz</strong> needs no extra parts beyond a <strong>250 VAC</strong>-rated fuse and inlet.</p>
+<hr>
+<h2>0. How to use this guide</h2>
+<h3>0.1 Phase order (do not skip)</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>What</th>
+<th>GG-PRE connected?</th>
+<th>Tubes in?</th>
+<th>Signal wired?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>0</strong></td>
+<td>Parts, bench, mains hardware</td>
+<td>—</td>
+<td>—</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td>Transformer / IEC</td>
+<td>No</td>
+<td>—</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>GG-PSU bring-up</td>
+<td>No</td>
+<td>—</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>GG-PRE power only</td>
+<td>Yes (4 wires)</td>
+<td>After rails OK <strong>I</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>RCA, pot, star ground</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>Listen / tune</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>Chassis (later)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3>0.2 Stop if fail</h3>
+<ul>
+<li><strong>Smoke</strong>, <strong>hissing arc</strong>, or <strong>hot smell</strong> → power off, discharge HV caps, diagnose before retry.</li>
+<li><strong>±200 V</strong> wrong by more than <strong>~10%</strong> or <strong>unstable</strong> → do not insert tubes; fix PSU strapping / zeners (<a href="gg-psu-component-id.html">gg-psu-component-id.md</a>).</li>
+<li><strong>Heater mode unknown</strong> → do not apply <strong>+12</strong> until pins <strong>4/5/9</strong> are continuity-checked (<a href="gg-pre-amp-schematic.html">gg-pre-amp-schematic.md §3</a>).</li>
+</ul>
+<h3>0.3 Safety (every session)</h3>
+<ul>
+<li><strong>±200 V</strong> and <strong>~220 VAC</strong> secondaries can <strong>kill</strong>. Work one hand in pocket when probing <strong>I</strong>.</li>
+<li><strong>Discharge</strong> PSU bulk caps before touching HV nodes (<a href="gg-psu/index.html">gg-psu/README.md</a>).</li>
+<li><strong>Primary fuse</strong> in line; insulated terminations on all AC.</li>
+</ul>
+<hr>
+<h2>Phase 0 — Parts, tools, bench layout</h2>
+<h3>1.1 Core kit (you have — photos <strong>C</strong>)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>R20-TS4803A</strong> R-core transformer (<a href="./pcb-photos/transformer/zerozone-r20-ts4803a-label.jpg">label photo</a>)</li>
+<li><input disabled="" type="checkbox"> <strong>GG-PSU</strong> PCB (populated)</li>
+<li><input disabled="" type="checkbox"> <strong>GG-PRE AMP</strong> PCB (populated)</li>
+<li><input disabled="" type="checkbox"> <strong>3× 12AU7</strong> (ECC82)</li>
+</ul>
+<h3>1.2 Front end and mains (bench or chassis)</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Suggested spec</th>
+<th>Checked</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>IEC inlet</strong></td>
+<td>C14, <strong>with fuse holder</strong> (see <strong>Phase 1 §1.0 fuse</strong>; interim <strong>ESKA 1.6 A Träge</strong>, order <strong>200 mA T</strong> e.g. <strong>ESKA 522.520</strong>)</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>Power switch</strong></td>
+<td><strong>DPST</strong> (double-pole single-throw), <strong>≥ 250 VAC</strong>, <strong>≥ 2 A</strong> <strong>I</strong> — switches <strong>both L and N</strong> to the trafo primary</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>Alps pot</strong></td>
+<td>Dual-gang, <strong>log taper (A)</strong>, <strong>100 kΩ</strong> class (e.g. RK27)</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>RCA jacks</strong></td>
+<td>2× in, 2× out; isolated ground lug preferred</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>Star ground (chosen)</strong></td>
+<td>Short <strong>copper strap</strong> (~25 mm wide): <strong><code>IN_GND</code>→★</strong> (<a href="#3-star-grounding-do-with-phase-4--6-wiring">§3</a>)</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>Star ground (debug)</strong></td>
+<td>2× <strong>10 Ω, 0.5 W</strong> (optional sleeve lift later)</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>Wire</strong></td>
+<td><strong>18 AWG</strong> AC; <strong>22–24 AWG</strong> signal; shielded cable for inputs</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>Barrier strip / Wago</strong></td>
+<td>Trafo ↔ PSU AC connections</td>
+<td>[ ]</td>
+</tr>
+</tbody></table>
+<h3>1.3 Tools</h3>
+<ul>
+<li><input disabled="" type="checkbox"> DMM (AC and DC volts, continuity)</li>
+<li><input disabled="" type="checkbox"> Discharge tool or <strong>high-value resistor</strong> for HV caps <strong>I</strong></li>
+<li><input disabled="" type="checkbox"> Variac or <strong>series lamp</strong> for first mains power-on <strong>I</strong> (recommended)</li>
+<li><input disabled="" type="checkbox"> Tube puller, labels for V1/V2/V3</li>
+<li><input disabled="" type="checkbox"> Headphones / amp at <strong>low level</strong> for Phase 5</li>
+</ul>
+<h3>1.4 Bench layout</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Trafo on mat; <strong>GG-PSU</strong> beside it; <strong>GG-PRE</strong> on standoffs (not bare metal table)</li>
+<li><input disabled="" type="checkbox"> <strong>YEL / GRN / BLU</strong> leads labelled</li>
+<li><input disabled="" type="checkbox"> Signal wiring kept away from trafo and bridges</li>
+</ul>
+<p><strong>Phase 0 sign-off:</strong> [ ] All parts staged · [ ] Bench layout · [ ] Trafo leads labelled.</p>
+<hr>
+<h2>2. System overview</h2>
+<h3>2.1 Signal and power chain</h3>
+<pre><code>IEC (fused) ──► DPST ──► R20-TS4803A (230 V: RED–GRY tie)
+                    ├─ YEL + GRN ──► GG-PSU HV-IN
+                    └─ BLU (14 VAC) ──► GG-PSU FIL-IN
+                              │
+                    GG-PSU ──┴── ±200 V, +12 V, GND ──► GG-PRE (4-pin)
+                              │
+RCA IN ──► Alps pot ──► IN terminal          OUT terminal ──► RCA OUT
+</code></pre>
+<div class="mermaid">flowchart LR
+  subgraph mains [Mains_NL_230V_50Hz]
+    IEC[IEC_C14_fused]
+    SW[DPST]
+  end
+  subgraph ac [R20_TS4803A]
+    Pri[RED_GRY_series]
+    YEL[YEL_220VAC]
+    GRN[GRN_220VAC]
+    BLU[BLU_14VAC]
+  end
+  subgraph psu [GG_PSU]
+    HV[Reg_HV_x2]
+    FIL[LT1085_12V]
+  end
+  subgraph pre [GG_PRE]
+    Tubes[3x_12AU7]
+    Term[IN_OUT]
+  end
+  subgraph front [Front_end]
+    Pot[Alps_100k_log]
+    RCA[RCA_IN_OUT]
+  end
+  IEC --> SW --> Pri
+  YEL --> HV
+  GRN --> HV
+  BLU --> FIL
+  HV --> Tubes
+  FIL --> Tubes
+  RCA --> Pot --> Term
+  Term --> RCA
+</div>
+<h3>2.2 GG-PRE screw terminals <strong>C</strong></h3>
+<p><strong>Power</strong> (right edge, <strong>top → bottom</strong>):</p>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Net</th>
+<th>Wire from GG-PSU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>−200 V</strong></td>
+<td>Negative regulated HV</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>+12</strong></td>
+<td>Filament DC</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>+200 V</strong></td>
+<td>Positive regulated HV</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>GND</strong></td>
+<td>Common (single feed from PSU reference)</td>
+</tr>
+</tbody></table>
+<p><strong>Audio IN</strong> (top centre): <strong>IN-R</strong> · <strong>GND</strong> · <strong>IN-L</strong> (left to right).</p>
+<p><strong>Audio OUT</strong> (bottom centre): <strong>OUT-R</strong> · <strong>GND</strong> · <strong>OUT-L</strong>.</p>
+<h3>2.3 Tube positions <strong>I</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Tube</th>
+<th>Board location</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>V1</strong></td>
+<td>Near <strong>IN-R</strong></td>
+<td>Right channel front end</td>
+</tr>
+<tr>
+<td><strong>V2</strong></td>
+<td>Near <strong>IN-L</strong></td>
+<td>Left channel front end</td>
+</tr>
+<tr>
+<td><strong>V3</strong></td>
+<td>Centre</td>
+<td>Dual output cathode followers</td>
+</tr>
+</tbody></table>
+<h3>2.4 Transformer quick reference <strong>C</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Wire</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>BLK – RED</strong></td>
+<td>Primary half A (115 V)</td>
+</tr>
+<tr>
+<td><strong>GRY – ORG</strong></td>
+<td>Primary half B (115 V)</td>
+</tr>
+<tr>
+<td><strong>230 V:</strong> tie <strong>RED + GRY</strong> only; mains across <strong>BLK</strong> and <strong>ORG</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>YEL</strong></td>
+<td>HV secondary ~220 VAC</td>
+</tr>
+<tr>
+<td><strong>GRN</strong></td>
+<td>HV secondary ~220 VAC</td>
+</tr>
+<tr>
+<td><strong>BLU</strong></td>
+<td>Filament secondary ~14 VAC</td>
+</tr>
+</tbody></table>
+<p>Full diagrams: <a href="gg-psu/transformer.html">gg-psu/transformer.md</a>.</p>
+<hr>
+<h2>3. Star grounding (do with Phase 4 / 6 wiring)</h2>
+<p>Grounding is <strong>part of the circuit</strong> on grounded-grid stages (<a href="marantz-7-vs-gg-reference.html#5-star-grounding-deep-dive">§5</a>). Rectifier/HV return currents must <strong>not</strong> share a long path with <strong>IN GND</strong> before the star — otherwise hum modulates the <strong>grounded-grid</strong> stage.</p>
+<p><strong>PCB local pour <strong>C</strong>:</strong> power <strong><code>GND</code></strong>, <strong>IN centre</strong>, <strong>OUT centre</strong> share a ground spine on GG-PRE (<a href="gg-pre-pcb-reverse-engineering.html">gg-pre-pcb-reverse-engineering.md</a>) — that is <strong>not</strong> the <strong>chassis</strong> star until you wire it.</p>
+<p><strong>As-built RCAs <strong>C</strong>:</strong> plastic bodies — sleeves <strong>isolated</strong> from chassis (required for this plan).</p>
+<h3>3.1 Safety PE vs audio star</h3>
+<ul>
+<li><strong>Geel-groen = PE (aarde)</strong>, not neutral. Neutral is <strong>blauw</strong>.</li>
+<li>Existing safety bond (keep as-is):</li>
+</ul>
+<pre><code class="language-text">IEC PE (geel-groen) ──┐
+trafo geel-groen ─────┴──► chassis PE lug (near IEC)
+</code></pre>
+<ul>
+<li>That PE lug is <strong>not</strong> the audio star. Chassis metal still connects PE to the audio star electrically (Class I — intended). Avoid <strong>extra intentional circuit-to-chassis wires</strong>.</li>
+</ul>
+<h3>3.2 Chosen method (this build)</h3>
+<p><strong>Method B — one copper strap:</strong> <strong>GG-PRE <code>IN_GND</code></strong> (same net as power pin 4 / <code>OUT GND</code> pour) → <strong>chassis audio star bolt</strong> near the <strong>input / GG-PRE</strong> side (prefer input side over pure geometric middle; middle OK only if leads stay short).</p>
+<p><strong>Only one intentional circuit conductor</strong> lands on the star bolt — from <strong><code>IN_GND</code></strong>. Everything else gathers at <strong><code>IN_GND</code> / the board</strong> first.</p>
+<p>Keep <strong>10 Ω sleeve→chassis</strong> (Method A) as a <strong>hum-debug swap later</strong>, not the first wiring (<a href="marantz-7-vs-gg-reference.html#52-what-bruce-rozenblit--kit-notes-recommend-two-equivalent-methods">reference §5.2</a>).</p>
+<h3>3.3 What lands on the star bolt</h3>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>Lands on star bolt?</th>
+<th>Goes where instead</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GG-PRE <code>IN_GND</code></strong></td>
+<td><strong>Yes — the only audio wire/strap</strong></td>
+<td>Short copper strap → ★</td>
+</tr>
+<tr>
+<td><strong>RCA IN sleeves</strong></td>
+<td><strong>No</strong></td>
+<td>→ <code>IN_GND</code> terminal / bus</td>
+</tr>
+<tr>
+<td><strong>Alps pot ground</strong></td>
+<td><strong>No</strong></td>
+<td>→ same <code>IN_GND</code> bus</td>
+</tr>
+<tr>
+<td><strong>RCA OUT sleeves</strong></td>
+<td><strong>No</strong></td>
+<td>→ <code>OUT_GND</code> only</td>
+</tr>
+<tr>
+<td><strong>PSU <code>GND</code></strong></td>
+<td><strong>No</strong></td>
+<td>→ PRE pin 4 only</td>
+</tr>
+<tr>
+<td><strong>IEC PE / trafo shield</strong></td>
+<td><strong>No</strong></td>
+<td>Stay on PE lug</td>
+</tr>
+<tr>
+<td><strong>Star bolt into chassis</strong></td>
+<td>(mechanical)</td>
+<td>Bare metal = the chassis bond</td>
+</tr>
+<tr>
+<td><strong>Mains N / L</strong></td>
+<td><strong>Never</strong></td>
+<td>Inlet / switch / primary only</td>
+</tr>
+<tr>
+<td><strong>Filament return</strong></td>
+<td><strong>No separate chassis wire</strong></td>
+<td>Stays on PSU→PRE <code>GND</code> after measure <strong>U</strong></td>
+</tr>
+</tbody></table>
+<h3>3.4 Wiring diagram</h3>
+<div class="mermaid">flowchart TB
+  subgraph safety [Safety_PE]
+    IEC_PE[IEC_geel_groen]
+    TrafoShield[Trafo_geel_groen]
+    PELug[Chassis_PE_lug]
+    IEC_PE --> PELug
+    TrafoShield --> PELug
+  end
+
+  subgraph chassis [Chassis_metal]
+    PELug -.-> StarBolt
+    StarBolt[Audio_star_bolt]
+  end
+
+  subgraph psu [GG_PSU]
+    PsuGnd[PSU_GND_midpoint]
+  end
+
+  subgraph pre [GG_PRE]
+    Pin4[Power_pin4_GND]
+    InGnd[IN_GND]
+    OutGnd[OUT_GND]
+    Pin4 --- InGnd
+    InGnd --- OutGnd
+  end
+
+  subgraph front [Front_end_isolated_RCAs]
+    InSleeve[RCA_IN_sleeves_bus]
+    PotGnd[Alps_pot_ground]
+    OutSleeve[RCA_OUT_sleeves]
+  end
+
+  PsuGnd -->|"one wire only"| Pin4
+  InSleeve --> InGnd
+  PotGnd --> InGnd
+  OutSleeve --> OutGnd
+  InGnd -->|"short copper strap"| StarBolt
+</div>
+<pre><code class="language-text">                    chassis metal
+                         │
+IEC PE + trafo GY ──► PE lug        ★ audio star bolt (bare metal)
+                         │               ▲
+                         └───────────────┘ (chassis only — no extra PE wire)
+
+PSU GND ──── one wire ────► GG-PRE pin4 GND ═══ PCB pour ═══ IN GND ═══ OUT GND
+                                              │                │           │
+                                         copper strap     IN sleeves    OUT sleeves
+                                              │            + pot GND     (to OUT GND
+                                              ▼             only)         only)
+                                         ★ star bolt
+</code></pre>
+<h3>3.5 Rules (checklist)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>One</strong> circuit wire/strap to chassis star: <strong><code>IN_GND</code> → ★</strong></li>
+<li><input disabled="" type="checkbox"> <strong>One</strong> power ground wire: <strong>PSU GND → GG-PRE pin 4 (<code>GND</code>)</strong></li>
+<li><input disabled="" type="checkbox"> <strong>IN sleeves + pot ground → <code>IN_GND</code></strong> (not separate star radials)</li>
+<li><input disabled="" type="checkbox"> <strong>OUT sleeves → <code>OUT_GND</code> only</strong> (no second chassis bond at outputs)</li>
+<li><input disabled="" type="checkbox"> <strong>PE</strong> stays on its lug; no extra PE wire to the audio star</li>
+<li><input disabled="" type="checkbox"> Boards on <strong>insulating standoffs</strong> — no accidental PCB→chassis bonds via screws</li>
+<li><input disabled="" type="checkbox"> Do <strong>not</strong> add a separate PSU “GND to chassis” tab once the PRE strap is fitted</li>
+</ul>
+<h3>3.6 Bench without metal chassis</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Use a <strong>copper bus</strong> as “fake chassis” at the star.</li>
+<li><input disabled="" type="checkbox"> <strong>PSU GND → PRE pin 4 → IN GND / pot ground</strong> at <strong>one</strong> lug.</li>
+<li><input disabled="" type="checkbox"> Optional <strong>10 Ω</strong> from RCA sleeves to that bus (debug only).</li>
+</ul>
+<h3>3.7 Before you bond — measure <strong>U</strong></h3>
+<ul>
+<li><input disabled="" type="checkbox"> Filament return vs HV return on <strong>GG-PSU</strong> may be isolated until user bonds (<a href="gg-psu-pcb-reverse-engineering.html">gg-psu-pcb-reverse-engineering.md</a>).</li>
+</ul>
+<hr>
+<h2>Phase 1 — Transformer and mains</h2>
+<p><strong>Goal:</strong> Fused IEC, <strong>DPST</strong> mains switch, correct <strong>230 V</strong> primary, labelled secondaries, no-load AC voltages. <strong>GG-PSU disconnected</strong> for first mains test.</p>
+<h3>1.0 IEC, fuse, and DPST (mains front end)</h3>
+<h4>Fuse (primary, in <strong>L</strong> only)</h4>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Recommendation <strong>I</strong></th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Type</strong></td>
+<td><strong>Time-delay / slow blow</strong> (marking <strong>T</strong>, “delayed”, or anti-surge)</td>
+<td>R-core <strong>inrush</strong> on turn-on; fast <strong>F</strong> fuses often nuisance-trip</td>
+</tr>
+<tr>
+<td><strong>Current</strong></td>
+<td><strong>200 mA</strong> for <strong>230 V</strong> EU (first choice)</td>
+<td>Label secondaries ≈ <strong>30 VA</strong> class → steady primary ≈ <strong>130–180 mA</strong>; <strong>200 mA T</strong> is headroom without being weak protection</td>
+</tr>
+<tr>
+<td><strong>Alternate</strong></td>
+<td><strong>160 mA T</strong> if measured idle is low and <strong>200 mA</strong> feels loose; <strong>250 mA T</strong> only if <strong>200 mA</strong> trips on every cold start <strong>and</strong> wiring is verified</td>
+<td>Re-tune from <strong>measurement</strong>, not guess</td>
+</tr>
+<tr>
+<td><strong>Voltage</strong></td>
+<td><strong>≥ 250 VAC</strong> (mains-rated)</td>
+<td>EU mains</td>
+</tr>
+<tr>
+<td><strong>Package</strong></td>
+<td><strong>5×20 mm</strong> glass (match fused IEC module)</td>
+<td>Typical C14 holder</td>
+</tr>
+<tr>
+<td><strong>Breaking</strong></td>
+<td><strong>HBC</strong> / mains-rated part (e.g. Schurter, Littelfuse)</td>
+<td>Not automotive; not DC-only</td>
+</tr>
+</tbody></table>
+<p><strong>Rough check:</strong> label load ≈ 2×(220 V×34 mA)+14 V×1 A ≈ <strong>29 W</strong> → (I_\mathrm{primary} \approx 29/230 \approx 130) mA at 100% load, plus loss → <strong>~150–200 mA</strong> steady at full crank. Idle with tubes is lower — a <strong>200 mA T</strong> fuse should <strong>not</strong> blow in normal use.</p>
+<p><strong>After burn-in:</strong> measure <strong>true RMS</strong> primary current at idle (and optionally at loud listen). Fuse rating ≈ <strong>1.25–2×</strong> steady <strong>RMS</strong>, still <strong>T</strong> type. If <strong>200 mA T</strong> blows only at switch-on → check inrush/wiring before upsizing.</p>
+<p><strong>115 V US</strong> (parallel primaries): same VA needs <strong>~2×</strong> current → about <strong>400 mA T</strong> <strong>I</strong> on 115 V.</p>
+<p><strong>Interim fuse on bench:</strong> <strong>ESKA 1.6 A Träge</strong> (5×20) is acceptable until <strong>200 mA T</strong> arrives; <strong>do not</strong> use <strong>6.3 A T</strong> or <strong>4 A fast</strong> on the primary. <strong>Order target:</strong> <strong>ESKA 522.520</strong> or equivalent <strong>200 mA T</strong>, 250 VAC, 5×20 mm.</p>
+<h4>Netherlands (230 V / 50 Hz) wire colours <strong>C</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Colour</th>
+<th>Role (NEN 1010 / HD 60364)</th>
+<th>To</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Bruin</strong></td>
+<td><strong>Fase (L)</strong> — switched / fused conductor <strong>I</strong></td>
+<td><strong>Fuse</strong> → <strong>DPST pole 1</strong> → trafo <strong>BLK</strong></td>
+</tr>
+<tr>
+<td><strong>Blauw</strong></td>
+<td><strong>Nul (N)</strong> — return conductor</td>
+<td><strong>DPST pole 2</strong> → trafo <strong>ORG</strong></td>
+</tr>
+<tr>
+<td><strong>Geel-groen</strong></td>
+<td><strong>Aarde (PE)</strong></td>
+<td>Chassis <strong>only</strong> — <strong>not</strong> interchangeable with blauw</td>
+</tr>
+</tbody></table>
+<p><strong>Are bruin and blauw “equal”?</strong> Under <strong>NEN 1010</strong> they are <strong>not</strong> the same function: <strong>L</strong> and <strong>N</strong> are named, coloured, and terminated differently; <strong>both</strong> can be dangerous (230 V between them). What <em>is</em> true in NL:</p>
+<ul>
+<li><strong>Schuko (type F)</strong> plugs are <strong>unpolarized</strong> — the wall cord may swap which conductor is <strong>L</strong> vs <strong>N</strong> at your <strong>IEC</strong> pins. You often cannot rely on “left wire = bruin” without checking the inlet markings or measuring.</li>
+<li>For an <strong>isolated transformer primary</strong> only (your <strong>BLK–ORG</strong> pair), <strong>swapping bruin ↔ blauw</strong> at the trafo terminals is usually <strong>fine for AC operation</strong> (no polarity requirement).</li>
+<li><strong>DPST</strong> that opens <strong>both</strong> poles when OFF is normal good practice here — then neither wire feeds the trafo when off.</li>
+<li><strong>Fuse</strong> (overcurrent protection) still belongs in the <strong>fase (L)</strong> path per installation rules — <strong>not</strong> because blauw is “safe”, but because a <strong>blown neutral fuse with live still connected</strong> is a serious fault condition. Use the inlet’s <strong>L</strong>-marked fuse position if present.</li>
+</ul>
+<p>Verify <strong>ELCOM</strong> silk <strong>L / N / ⏚</strong> and your photos in <a href="./pcb-photos/build/">pcb-photos/build/</a>.</p>
+<p><strong>Build photos (inlet + DPST WIP):</strong> <a href="./pcb-photos/build/iec-dpst-wiring-overview.jpg">overview</a> · <a href="./pcb-photos/build/iec-elcom-earth-and-lines.jpg">earth / line connections</a>.</p>
+<h4>As-built inlet wiring (user <strong>C</strong>, ELCOM + DPST, 2026-11-10)</h4>
+<p>Documented from your chassis photos and description (updated wire → trafo colours):</p>
+<pre><code>IEC blauw  ──► [NTC] ──► [fuse, 5×20] ──► DPST pole A ──► trafo **BLK** (zwart)
+IEC bruin  ────────────────────────────► DPST pole B ──► trafo **ORG** (oranje)
+IEC geel-groen (PE) ──┬──► chassis (safety earth bus)
+trafo geel-groen  ────┘     same bonding point as IEC PE
+</code></pre>
+<p><strong>Inside trafo (230 V, unchanged):</strong> tie <strong>RED ↔ GRY</strong>; primary is still <strong>BLK … ORG</strong> across the two 115 V halves (<a href="gg-psu/transformer.html">transformer.md</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>PE + trafo shield to one chassis point</strong></td>
+<td><strong>OK</strong> <strong>C</strong></td>
+<td>IEC PE and trafo <strong>geel-groen</strong> at the <strong>same</strong> lug — good; keeps one safety-earth reference</td>
+</tr>
+<tr>
+<td><strong>DPST switches both colours</strong></td>
+<td><strong>OK</strong> <strong>C</strong></td>
+<td>Blauw and bruin through switch before <strong>BLK</strong> / <strong>ORG</strong></td>
+</tr>
+<tr>
+<td><strong>Blauw→BLK, bruin→ORG</strong></td>
+<td><strong>OK</strong> <strong>C</strong></td>
+<td>Valid AC primary assignment (Schuko may swap L/N at IEC; this is your fixed mapping)</td>
+</tr>
+<tr>
+<td><strong>NTC on blauw leg</strong></td>
+<td><strong>OK</strong> <strong>I</strong> if rated</td>
+<td>Series: <strong>blauw → NTC → fuse → switch</strong>; mains-class NTC; <a href="./pcb-photos/build/iec-elcom-earth-and-lines.jpg">photo</a></td>
+</tr>
+<tr>
+<td><strong>Fuse only in blauw chain</strong></td>
+<td><strong>Acceptable interim / not ideal</strong></td>
+<td><strong>NEN</strong> prefers fuse in <strong>bruin (L)</strong>. If blauw fuse blows <strong>with switch ON</strong>, bruin still feeds <strong>ORG</strong> → <strong>switch OFF</strong> before fuse change; later: move fuse to bruin if inlet allows</td>
+</tr>
+<tr>
+<td><strong>Audio star</strong></td>
+<td><strong>Separate</strong> <strong>I</strong></td>
+<td>This chassis PE bus is <strong>safety earth</strong> only until Phase 4 audio star (do not tie RCA ground to PE at multiple random points)</td>
+</tr>
+</tbody></table>
+<p><strong>Verdict:</strong> <strong>OK to proceed</strong> to Phase 1 no-load trafo test when checks below pass.</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Done</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Switch <strong>OFF</strong>, unplugged: <strong>no</strong> continuity blauw→<strong>BLK</strong> <strong>and</strong> bruin→<strong>ORG</strong></td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Switch <strong>ON</strong>, unplugged: continuity <strong>both</strong> paths</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>RED–GRY</strong> tied at trafo only (no BLK/ORG cross-ties)</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Trafo <strong>geel-groen</strong> and IEC PE same chassis point; <strong>not</strong> on switch poles</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Order on blauw: <strong>NTC → fuse → switch → BLK</strong></td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Fuse: <strong>ESKA 1.6 A Träge</strong> (interim) or <strong>200 mA T</strong> when available</td>
+<td>[ ]</td>
+</tr>
+</tbody></table>
+<p><strong>Optional improvement (later):</strong> <strong>bruin → fuse → switch → ORG</strong>, <strong>blauw → NTC → switch → BLK</strong> — only if you want fuse on bruin; keep <strong>NTC</strong> on one leg only.</p>
+<h4>DPST wiring (reference target)</h4>
+<p>Use a <strong>DPST</strong> so <strong>both</strong> line and neutral to the transformer open when the amp is off (safer on the bench than switching <strong>L</strong> only).</p>
+<pre><code>IEC pin L  ──► [ fuse 200 mA T, 250 VAC ] ──► DPST pole 1 ──► BLK   (trafo primary)
+IEC pin N  ──────────────────────────────► DPST pole 2 ──► ORG   (trafo primary)
+IEC pin PE (earth) ─────────────────────► chassis / bench safety ground
+                                              (NOT through switch)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fuse in <strong>L</strong> only <strong>I</strong></td>
+<td>[ ] After inlet, before switch</td>
+</tr>
+<tr>
+<td><strong>OFF</strong> = no continuity L→BLK and N→ORG</td>
+<td>[ ] DMM ohms, unplugged</td>
+</tr>
+<tr>
+<td><strong>ON</strong> = continuity both poles</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>PE</strong> never on switch poles</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Switch body clearance from metal chassis <strong>I</strong></td>
+<td>[ ] Use insulated bat handle or guard</td>
+</tr>
+</tbody></table>
+<p>If the IEC module has its <strong>own</strong> switch, you may still add a <strong>DPST</strong> after the fuse for the trafo feed — avoid <strong>two</strong> switches in series on <strong>L</strong> only with <strong>N</strong> always connected (<strong>I</strong>).</p>
+<h3>1.1 Primary wiring (230 V)</h3>
+<p>Inside the trafo (after BLK / ORG):</p>
+<pre><code>   BLK ────── (from DPST pole 1)
+                    ├── winding A (115 V)
+                 RED ─┬─ GRY
+                        ├── winding B (115 V)
+   ORG ────── (from DPST pole 2)
+</code></pre>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>1.1.1</strong> Tie <strong>RED</strong> to <strong>GRY</strong> only (no other cross-ties).</li>
+<li><input disabled="" type="checkbox"> <strong>1.1.2</strong> <strong>DPST ON:</strong> <strong>BLK</strong> and <strong>ORG</strong> fed from IEC <strong>L</strong> (fused) and <strong>N</strong> as in §1.0.</li>
+<li><input disabled="" type="checkbox"> <strong>1.1.3</strong> IEC <strong>earth (PE)</strong> → bench/chassis safety ground (not audio star yet).</li>
+</ul>
+<h3>1.2 Secondaries to terminals (PSU still off)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>1.2.1</strong> <strong>YEL</strong> and <strong>GRN</strong> to barrier strip → will go to <strong>HV-IN</strong> in Phase 2.</li>
+<li><input disabled="" type="checkbox"> <strong>1.2.2</strong> <strong>BLU</strong> to barrier strip → will go to <strong>FIL-IN</strong> in Phase 2.</li>
+<li><input disabled="" type="checkbox"> <strong>1.2.3</strong> Insulate all HV secondary ends.</li>
+</ul>
+<h3>1.3 Resistance checks (power off)</h3>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Expected</th>
+<th>Measured</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Primary BLK–ORG (via series windings)</td>
+<td>Low ohms, not short to core</td>
+<td></td>
+</tr>
+<tr>
+<td>YEL–GRN (if both ends open)</td>
+<td>High / open between windings <strong>U</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>BLU to any primary</td>
+<td>No continuity to mains</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3>1.4 No-load AC test (PSU disconnected)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>1.4.1</strong> Power on briefly; measure AC:</li>
+<li><input disabled="" type="checkbox"> <strong>1.4.2</strong> Power off; record:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Winding</th>
+<th>Expected (approx.)</th>
+<th>Measured</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>YEL</strong>–ref <strong>I</strong></td>
+<td>~220 VAC class</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>GRN</strong>–ref <strong>I</strong></td>
+<td>~220 VAC class</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>BLU</strong>–ref</td>
+<td>~14 VAC</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Phase 1 sign-off:</strong> [ ] RED–GRY correct · [ ] Fuse in L · [ ] <strong>DPST opens L+N</strong> when OFF · [ ] Secondaries labelled · [ ] Voltages sane.</p>
+<hr>
+<h2>Phase 2 — GG-PSU (preamp disconnected)</h2>
+<p><strong>References:</strong> <a href="gg-psu/index.html">gg-psu/README.md</a>, <a href="gg-psu-schematic.html">gg-psu-schematic.md §2</a>, <a href="gg-psu-component-id.html">gg-psu-component-id.md</a>.</p>
+<h3>2.1 Visual pre-flight</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>2.1.1</strong> 3× <strong>KBP307</strong> bridges oriented correctly.</li>
+<li><input disabled="" type="checkbox"> <strong>2.1.2</strong> <strong>2SK2700</strong> on heatsinks, tight.</li>
+<li><input disabled="" type="checkbox"> <strong>2.1.3</strong> D-V / <strong>CR1</strong> strapping: <strong>200 V</strong> zener + short per BOM freeze.</li>
+<li><input disabled="" type="checkbox"> <strong>2.1.4</strong> Electrolytic polarity correct (see photos in <a href="./pcb-photos/psu/">pcb-photos/psu/</a>).</li>
+</ul>
+<h3>2.2 Connect transformer to PSU</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>2.2.1</strong> <strong>YEL</strong> → one <strong>HV-IN</strong> pair; <strong>GRN</strong> → other <strong>HV-IN</strong> pair (<strong>pin order U</strong> — buzz or note which is which).</li>
+<li><input disabled="" type="checkbox"> <strong>2.2.2</strong> <strong>BLU</strong> → <strong>FIL-IN</strong> / filament AC input (2-pin block near filament / <strong>LT1085</strong> — not mains).</li>
+</ul>
+<p><strong>As-built trafo → GG-PSU (user <strong>C</strong>, not powered yet):</strong> <a href="./pcb-photos/build/trafo-psu-wired-not-powered.jpg">photo</a></p>
+<table>
+<thead>
+<tr>
+<th>PSU connector</th>
+<th>Your wiring (verify before power)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>4-pin AC-IN / HV-IN</strong> (bottom centre)</td>
+<td><strong>Groen</strong> pair → top two screws; <strong>geel</strong> pair → bottom two screws (= <strong>GRN</strong> + <strong>YEL</strong> 220 V windings per trafo label)</td>
+</tr>
+<tr>
+<td><strong>2-pin</strong> (top/near filament reg)</td>
+<td><strong>Blauw</strong> twisted pair → toward trafo (must be <strong>14 V BLU</strong> secondary only — <strong>not</strong> mains blauw)</td>
+</tr>
+<tr>
+<td><strong>GG-PRE</strong></td>
+<td><strong>Not</strong> connected yet <strong>I</strong></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Before first power</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[ ] <strong>RED–GRY</strong> tied; mains only on <strong>BLK</strong> / <strong>ORG</strong> via switch</td>
+<td></td>
+</tr>
+<tr>
+<td>[ ] Loose trafo lead(s) at bottom — if <strong>BLU 14 V</strong>, land on <strong>2-pin</strong> filament AC; do not leave floating</td>
+<td></td>
+</tr>
+<tr>
+<td>[ ] <strong>No</strong> continuity from <strong>HV-IN</strong> screws to <strong>primary</strong> BLK/ORG</td>
+<td></td>
+</tr>
+<tr>
+<td>[ ] <strong>GG-PRE</strong> 4-pin <strong>unwired</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>[ ] Fuse installed; switch test <strong>OFF</strong> / <strong>ON</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>HV-IN pin map (fill in):</strong></p>
+<table>
+<thead>
+<tr>
+<th>PSU pin label</th>
+<th>Connected to</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HV-IN 1 (top)</td>
+<td><strong>GRN</strong> wire (groen)</td>
+</tr>
+<tr>
+<td>HV-IN 2</td>
+<td><strong>GRN</strong> wire (groen)</td>
+</tr>
+<tr>
+<td>HV-IN 3</td>
+<td><strong>YEL</strong> wire (geel)</td>
+</tr>
+<tr>
+<td>HV-IN 4 (bottom)</td>
+<td><strong>YEL</strong> wire (geel)</td>
+</tr>
+<tr>
+<td>FIL-IN (2-pin)</td>
+<td><strong>BLU</strong> 14 V <strong>I</strong> — confirm pair is only filament winding</td>
+</tr>
+</tbody></table>
+<h3>2.3 First energize</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>2.3.1</strong> Variac/lamp <strong>I</strong> or brief on/off.</li>
+<li><input disabled="" type="checkbox"> <strong>2.3.2</strong> Filament LED / indicator if present.</li>
+<li><input disabled="" type="checkbox"> <strong>2.3.3</strong> No smoke; MOSFET sinks warm only after minutes.</li>
+</ul>
+<h3>2.4 Filament rail (tubes still out of preamp)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>2.4.1</strong> Adjust <strong>W202</strong> trimmer toward <strong>~12.6 V DC</strong> at filament output <strong>I</strong> (final value after Phase 3 heater check).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Expected</th>
+<th>Measured</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Filament DC out</td>
+<td>12.0–12.6 V <strong>I</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3>2.5 High voltage ± strap (silk-accurate — easy to get wrong)</h3>
+<p><strong>Your board <strong>C</strong>:</strong> one <strong>4-screw</strong> block = two <strong>VDC-OUT</strong> pairs (<code>−</code> <code>+</code> <code>−</code> <code>+</code> top→bottom); filament <strong>HR-X</strong> (<code>−</code> <code>+</code>). Photo: <a href="./pcb-photos/psu/04-overview-vdc-out.jpg">04-overview-vdc-out.jpg</a>. Deep ref: <a href="gg-psu-schematic.html">gg-psu-schematic.md §2</a>.</p>
+<p>Each VDC-OUT pair is a <strong>floating ~+200 V</strong> supply (<code>−</code> → <code>+</code>). For bipolar rails you <strong>series</strong> them around a <strong>midpoint = GND</strong>:</p>
+<ul>
+<li>Upper channel sits <strong>above</strong> ground → its <strong><code>+</code></strong> = <strong>+200 V</strong>, its <strong><code>−</code></strong> = <strong>GND</strong></li>
+<li>Lower channel sits <strong>below</strong> ground → its <strong><code>+</code></strong> = <strong>GND</strong>, its <strong><code>−</code></strong> = <strong>−200 V</strong></li>
+<li><strong>Do not</strong> wire “all minuses to ground.”</li>
+</ul>
+<h4>Mapping table (PSU → GG-PRE) + meter checks</h4>
+<p>Join <strong>top <code>−</code></strong>, <strong>bottom <code>+</code></strong>, and <strong>HR-X <code>−</code></strong> at the PSU (short jumpers), then <strong>one</strong> wire to PRE <strong><code>GND</code></strong>.</p>
+<table>
+<thead>
+<tr>
+<th>PSU screw (silk)</th>
+<th>→ GG-PRE pin</th>
+<th>Measure (DMM + on this node, − on <strong>GND</strong> midpoint)</th>
+<th>Expected</th>
+<th>Measured</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Top VDC-OUT <code>+</code></strong></td>
+<td><strong><code>+200V</code></strong></td>
+<td>vs GND</td>
+<td><strong>~+200 V DC</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Top VDC-OUT <code>−</code></strong></td>
+<td><strong><code>GND</code></strong> (midpoint)</td>
+<td>—</td>
+<td>0 V ref</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Bottom VDC-OUT <code>+</code></strong></td>
+<td><strong><code>GND</code></strong> (same midpoint)</td>
+<td>Continuity to top <code>−</code> (power off)</td>
+<td><strong>~0 Ω</strong> after jumper</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Bottom VDC-OUT <code>−</code></strong></td>
+<td><strong><code>−200V</code></strong></td>
+<td>vs GND</td>
+<td><strong>~−200 V DC</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>HR-X <code>+</code></strong></td>
+<td><strong><code>+12</code></strong></td>
+<td>vs GND</td>
+<td><strong>~+12.0–12.6 V DC</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>HR-X <code>−</code></strong></td>
+<td><strong><code>GND</code></strong> (same midpoint)</td>
+<td>Continuity to HV GND jumpers (power off)</td>
+<td><strong>~0 Ω</strong> after bond</td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Extra check</th>
+<th>Expected</th>
+<th>Measured</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Top <code>+</code></strong> vs <strong>bottom <code>−</code></strong> (across both rails)</td>
+<td><strong>~400 V DC</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Top <code>+</code></strong> vs <strong>top <code>−</code></strong> (one channel alone, before or after strap)</td>
+<td><strong>~+200 V</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Bottom <code>+</code></strong> vs <strong>bottom <code>−</code></strong> (other channel alone)</td>
+<td><strong>~+200 V</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+<pre><code class="language-text">Top VDC-OUT + ──────────────────────────► PRE +200V
+
+Top VDC-OUT − ──┐
+Bottom VDC-OUT + ─┼── (join at PSU) ───► PRE GND   ← one wire only
+HR-X − ───────────┘
+
+Bottom VDC-OUT − ───────────────────────► PRE −200V
+
+HR-X + ─────────────────────────────────► PRE +12
+</code></pre>
+<p><strong>You may swap</strong> which physical pair is the “+200” channel and which is the “−200” channel; the rule stays: <strong>one channel’s <code>−</code> and the other channel’s <code>+</code> form GND.</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>2.5.1</strong> Jumper top <code>−</code> ↔ bottom <code>+</code> ↔ HR-X <code>−</code>; mark that node as <strong>PSU GND</strong>.</li>
+<li><input disabled="" type="checkbox"> <strong>2.5.2</strong> Wire four leads to PRE: <strong>+200</strong>, <strong>−200</strong>, <strong>+12</strong>, <strong>GND</strong> (GND = the joined node only).</li>
+<li><input disabled="" type="checkbox"> <strong>2.5.3</strong> Fill <strong>Measured</strong> columns above (<strong>tubes out</strong> / PRE unwired for first HV check if preferred).</li>
+<li><input disabled="" type="checkbox"> <strong>2.5.4</strong> Confirm <strong>no</strong> wire from bottom <code>−</code> or top <code>+</code> into the GND bundle.</li>
+</ul>
+<h3>2.6 Ground reference before preamp wire</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>2.6.1</strong> PSU GND = joined midpoint in <strong>§2.5</strong> (<a href="marantz-7-vs-gg-reference.html#54-gg-psu-grounding--extra-caution-u">reference §5.4</a>).</li>
+<li><input disabled="" type="checkbox"> <strong>2.6.2</strong> <strong>One</strong> wire PSU <strong>GND</strong> → GG-PRE pin <strong>4</strong> — not multiple parallel ground paths; not to chassis star (star is <code>IN_GND</code>→★ later).</li>
+<li><input disabled="" type="checkbox"> <strong>2.6.3</strong> <strong>Measure</strong> filament return vs HV return on PSU (<strong>U</strong>) before bonding pot/RCA to chassis (<a href="gg-psu-pcb-reverse-engineering.html">gg-psu-pcb-reverse-engineering.md</a>).</li>
+<li><input disabled="" type="checkbox"> <strong>2.6.4</strong> <strong>GND is midpoint</strong> for ±200 V — symmetry matters for cathode followers (<a href="marantz-7-vs-gg-reference.html#56-marantz-model-7-vs-gg-grounding-philosophy">reference §5.6</a>).</li>
+</ul>
+<h3>2.7 Thermal soak (15–30 min, no preamp)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Re-measure rails; heatsinks warm, not untouchable.</li>
+</ul>
+<p><strong>Phase 2 sign-off:</strong> [ ] FIL V set · [ ] ±200 V OK · [ ] HV-IN map written · [ ] GND tie point chosen.</p>
+<hr>
+<h2>Phase 3 — GG-PRE power (no audio wiring)</h2>
+<p><strong>References:</strong> <a href="gg-pre/index.html">gg-pre/README.md</a>, <a href="gg-pre-amp-schematic.html">gg-pre-amp-schematic.md</a>.</p>
+<h3>3.1 Heater wiring — <strong>measure before power</strong></h3>
+<p>With board <strong>unpowered</strong>, each socket:</p>
+<table>
+<thead>
+<tr>
+<th>Socket</th>
+<th>Pin 4 →</th>
+<th>Pin 5 →</th>
+<th>Pin 9 →</th>
+<th>+12 terminal</th>
+<th>GND terminal</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>V2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>V3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>3.1.1</strong> Document <strong>series 12.6 V</strong> (4–5 string) vs <strong>parallel 6.3 V</strong> — do not guess.</li>
+<li><input disabled="" type="checkbox"> <strong>3.1.2</strong> Set PSU <strong>W202</strong> to match.</li>
+</ul>
+<h3>3.2 Four-wire power cable</h3>
+<p>Use adequately insulated wire; keep leads short; twist pairs <strong>I</strong> if long.</p>
+<table>
+<thead>
+<tr>
+<th>GG-PRE pin (top→bottom)</th>
+<th>PSU connection</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>−200 V</strong></td>
+<td>PSU −200 V</td>
+</tr>
+<tr>
+<td><strong>+12</strong></td>
+<td>Filament +</td>
+</tr>
+<tr>
+<td><strong>+200 V</strong></td>
+<td>PSU +200 V</td>
+</tr>
+<tr>
+<td><strong>GND</strong></td>
+<td><strong>One</strong> PSU GND reference</td>
+</tr>
+</tbody></table>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>3.2.1</strong> Double-check pin order on silkscreen before tightening.</li>
+<li><input disabled="" type="checkbox"> <strong>3.2.2</strong> Use <strong>twisted pair or coax</strong> for long inter-board runs (<a href="marantz-7-vs-gg-reference.html#53-what-your-gg-pre-pcb-already-does-c">reference §5.3</a>).</li>
+</ul>
+<h3>3.3 Tubes out — rail test</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>3.3.1</strong> Power on; measure at <strong>GG-PRE</strong> terminal block:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Terminal</th>
+<th>Expected</th>
+<th>Measured</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>−200 V</td>
+<td>~−200 V</td>
+<td></td>
+</tr>
+<tr>
+<td>+12</td>
+<td>per heater mode</td>
+<td></td>
+</tr>
+<tr>
+<td>+200 V</td>
+<td>~+200 V</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3>3.4 Insert tubes</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>3.4.1</strong> Power off; insert <strong>V1, V2, V3</strong> (correct orientation).</li>
+<li><input disabled="" type="checkbox"> <strong>3.4.2</strong> Power on; heaters glow evenly.</li>
+<li><input disabled="" type="checkbox"> <strong>3.4.3</strong> Re-check rails; listen for abnormal hiss.</li>
+<li><input disabled="" type="checkbox"> <strong>3.4.4</strong> Optional: DMM on <strong>OUT</strong> terminals — large DC offset is <strong>U</strong> until tubes settle (AC-coupled outputs).</li>
+</ul>
+<p><strong>Phase 3 sign-off:</strong> [ ] Heater mode documented · [ ] Rails at terminal · [ ] Tubes OK.</p>
+<hr>
+<h2>Phase 4 — RCA, Alps pot, star ground</h2>
+<p><strong>Full star rules and diagrams:</strong> <a href="#3-star-grounding-do-with-phase-4--6-wiring">§3</a>. <strong>Star location:</strong> prefer <strong>input / GG-PRE</strong> side. Plastic isolated RCAs <strong>C</strong>.</p>
+<h3>4.1 Alps pot wiring (100 kΩ log dual gang <strong>I</strong>)</h3>
+<p>Typical lug names vary by part; use your datasheet. Logical connections:</p>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>RCA IN L</strong> centre</td>
+<td>Pot <strong>L</strong> input (top of track)</td>
+</tr>
+<tr>
+<td><strong>RCA IN R</strong> centre</td>
+<td>Pot <strong>R</strong> input</td>
+</tr>
+<tr>
+<td>Pot <strong>L</strong> wiper</td>
+<td><strong>IN-L</strong></td>
+</tr>
+<tr>
+<td>Pot <strong>R</strong> wiper</td>
+<td><strong>IN-R</strong></td>
+</tr>
+<tr>
+<td>Pot ground end(s) / CCW</td>
+<td><strong>IN GND</strong> (with RCA return bus)</td>
+</tr>
+<tr>
+<td><strong>RCA IN</strong> sleeves</td>
+<td>Audio ground bus → <strong>IN GND</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>4.1.1</strong> Pot at minimum: wiper near ground side; verify with ohmmeter <strong>I</strong>.</li>
+<li><input disabled="" type="checkbox"> <strong>4.1.2</strong> RCA <strong>sleeves:</strong> return to <strong>IN GND</strong> at board — <strong>not</strong> to chassis except via the single <code>IN_GND</code> strap (<a href="#32-chosen-method-this-build">§3.2</a>).</li>
+</ul>
+<h3>4.2 Output RCAs</h3>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>OUT-L</strong></td>
+<td>RCA OUT L centre</td>
+</tr>
+<tr>
+<td><strong>OUT-R</strong></td>
+<td>RCA OUT R centre</td>
+</tr>
+<tr>
+<td><strong>OUT GND</strong></td>
+<td>Output sleeves → <strong><code>OUT_GND</code> only</strong> (board pour joins IN/OUT/power GND)</td>
+</tr>
+</tbody></table>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>4.2.1</strong> Do <strong>not</strong> add a second chassis bond at the output jacks.</li>
+</ul>
+<h3>4.3 Signal ASCII (stereo)</h3>
+<pre><code>RCA_IN_L/R (centre) ──► pot inputs
+RCA IN sleeves + pot ground ──► IN GND
+Pot wipers ──► IN-L, IN-R
+OUT-L, OUT-R ──► RCA out centres
+OUT sleeves ──► OUT GND only
+IN GND ──► one copper strap ──► ★ chassis star bolt
+</code></pre>
+<h3>4.4 Star bond (this build = Method B)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>4.4.1</strong> Confirm plastic RCA bodies isolate sleeves from chassis.</li>
+<li><input disabled="" type="checkbox"> <strong>4.4.2</strong> Wire <strong>IN sleeves + pot ground → <code>IN_GND</code></strong>.</li>
+<li><input disabled="" type="checkbox"> <strong>4.4.3</strong> Wire <strong>OUT sleeves → <code>OUT_GND</code></strong> only.</li>
+<li><input disabled="" type="checkbox"> <strong>4.4.4</strong> Fit <strong>one</strong> copper strap: <strong><code>IN_GND</code> → ★</strong> star bolt (bare chassis metal).</li>
+<li><input disabled="" type="checkbox"> <strong>4.4.5</strong> Confirm <strong>no</strong> extra circuit→chassis wires (no PSU GND tab, no OUT-to-chassis).</li>
+<li><input disabled="" type="checkbox"> <strong>4.4.6</strong> (Debug later only) Method A: <strong>10 Ω</strong> IN sleeve→chassis — change one thing at a time (<a href="#53-hum-debug-if-needed">§5.3</a>).</li>
+</ul>
+<h3>4.5 Keep leads short on bench</h3>
+<ul>
+<li><input disabled="" type="checkbox"> First listen wiring <strong>&lt; 30 cm</strong> where practical.</li>
+</ul>
+<p><strong>Phase 4 sign-off:</strong> [ ] L/R labelled · [ ] Star = Method B / <code>IN_GND</code>→★ · [ ] Pot smooth mechanically.</p>
+<hr>
+<h2>Phase 5 — Test and tune</h2>
+<h3>5.1 Shorted inputs</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Short <strong>RCA inputs</strong> (plugs or pot at minimum with short <strong>I</strong>).</li>
+<li><input disabled="" type="checkbox"> Listen at moderate volume on line out → note hum/hiss level: __________</li>
+</ul>
+<h3>5.2 Line source</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>One</strong> grounded source (avoid PC + double chassis ties).</li>
+<li><input disabled="" type="checkbox"> Pot starts <strong>~9 o’clock</strong>; increase slowly.</li>
+<li><input disabled="" type="checkbox"> Swap L/R cables to confirm channel labels.</li>
+</ul>
+<h3>5.3 Hum debug (if needed)</h3>
+<table>
+<thead>
+<tr>
+<th>Try</th>
+<th>Done</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Rotate trafo 90°</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Increase distance PSU ↔ PRE</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Remove extra ground bonds</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Compare 10 Ω vs strap</td>
+<td>[ ]</td>
+</tr>
+</tbody></table>
+<h3>5.4 Record final settings</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>W202 / filament V at PRE pin 2</td>
+<td></td>
+</tr>
+<tr>
+<td>+200 V at PRE</td>
+<td></td>
+</tr>
+<tr>
+<td>−200 V at PRE</td>
+<td></td>
+</tr>
+<tr>
+<td>HV-IN pin map (Phase 2)</td>
+<td></td>
+</tr>
+<tr>
+<td>Star location / method (10 Ω vs strap)</td>
+<td></td>
+</tr>
+<tr>
+<td>Fuse type in use</td>
+<td></td>
+</tr>
+<tr>
+<td>Idle hum subjective (1–5 quiet)</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3>5.5 Thermal soak</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Idle <strong>15–30 min</strong>; re-check PSU heatsinks and trafo temperature.</li>
+</ul>
+<p><strong>Phase 5 sign-off:</strong> [ ] Both channels · [ ] Acceptable idle noise · [ ] Settings logged in <strong>§11</strong>.</p>
+<p>Aligns with <a href="marantz-7-vs-gg-reference.html#57-suggested-bring-up-order-gg-pair-in-a-chassis">reference §5.7</a>.</p>
+<hr>
+<h2>Phase 6 — Chassis (when you leave the bench)</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Mount <strong>IEC</strong>, <strong>DPST</strong> (often rear with inlet), <strong>RCA</strong>, <strong>pot</strong>; trafo away from input jacks.</li>
+<li><input disabled="" type="checkbox"> <strong>Earth:</strong> IEC PE + trafo geel-groen → PE lug (<a href="#10-iec-fuse-and-dpst-mains-front-end">§1.0</a>); <strong>audio</strong> = one strap <code>IN_GND</code>→★ (<a href="#3-star-grounding-do-with-phase-4--6-wiring">§3</a>).</li>
+<li><input disabled="" type="checkbox"> Star bolt near <strong>input / GG-PRE</strong>; boards on <strong>insulating standoffs</strong>.</li>
+<li><input disabled="" type="checkbox"> GG-PSU airflow to <strong>N-MOS</strong> heatsinks; AC strain relief.</li>
+</ul>
+<p>Details: <a href="marantz-7-vs-gg-reference.html#57-suggested-bring-up-order-gg-pair-in-a-chassis">marantz-7-vs-gg-reference.md §5.7</a>.</p>
+<hr>
+<h2>10. Sign-off matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Pass criterion</th>
+<th>Date</th>
+<th>OK</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Trafo</td>
+<td>RED–GRY; fused primary; secondary volts</td>
+<td></td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>PSU alone</td>
+<td>~12–12.6 V FIL; ±200 V; stable heat</td>
+<td></td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Heater mode</td>
+<td>4/5/9 documented</td>
+<td></td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Preamp power</td>
+<td>Tubes; rails at terminal</td>
+<td></td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Star ground</td>
+<td>One PSU→PRE GND; one chassis bond</td>
+<td></td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td>Signal</td>
+<td>L/R; pot; shorted-input hum OK</td>
+<td></td>
+<td>[ ]</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>11. Build log (fill in as you go)</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Phase</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026-11-10</td>
+<td>0–1</td>
+<td><strong>As-built:</strong> blauw→NTC→fuse→SW→<strong>BLK</strong>; bruin→SW→<strong>ORG</strong>; IEC PE + trafo geel-groen → chassis (same point); fuse-on-blauw interim — Phase 1 §1.0</td>
+</tr>
+<tr>
+<td>2026-11-10</td>
+<td>2</td>
+<td>Trafo→PSU wired, <strong>not powered</strong> — groen/geel→4-pin HV; blauw→2-pin <strong>I</strong>; photo <a href="./pcb-photos/build/trafo-psu-wired-not-powered.jpg">trafo-psu-wired-not-powered.jpg</a></td>
+</tr>
+<tr>
+<td>2026-11-11</td>
+<td>3–4</td>
+<td>Star plan locked: plastic isolated RCAs; <strong>Method B</strong> one strap <strong><code>IN_GND</code>→★</strong>; PE lug separate; see <a href="#3-star-grounding-do-with-phase-4--6-wiring">§3</a></td>
+</tr>
+<tr>
+<td>2026-11-11</td>
+<td>2</td>
+<td>VDC-OUT / HR-X → PRE map + meter table locked in <a href="#25-high-voltage--strap-silk-accurate--easy-to-get-wrong">§2.5</a> (top <code>+</code>→+200; bottom <code>−</code>→−200; top <code>−</code>+bottom <code>+</code>+HR-X <code>−</code>→GND)</td>
+</tr>
+<tr>
+<td></td>
+<td>1</td>
+<td>Trafo no-load: YEL ____ V, GRN ____ V, BLU ____ V</td>
+</tr>
+<tr>
+<td></td>
+<td>2</td>
+<td>HV-IN map; +200 ____ V; −200 ____ V; FIL ____ V</td>
+</tr>
+<tr>
+<td></td>
+<td>3</td>
+<td>Heater: series / parallel; tube bring-up</td>
+</tr>
+<tr>
+<td></td>
+<td>4</td>
+<td>Pot P/N ______; star: Method B / <code>IN_GND</code>→★ location ______</td>
+</tr>
+<tr>
+<td></td>
+<td>5</td>
+<td>Hum / music listen</td>
+</tr>
+<tr>
+<td></td>
+<td>6</td>
+<td>Chassis</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Known unknowns (close during build)</h2>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Where to resolve</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HV-IN pin order</td>
+<td>Phase 2 table; <a href="gg-psu-schematic.html">gg-psu-schematic.md</a></td>
+</tr>
+<tr>
+<td>Heater series vs parallel</td>
+<td>Phase 3 table; <a href="gg-pre-amp-schematic.html">gg-pre-amp-schematic.md §3</a></td>
+</tr>
+<tr>
+<td>Filament vs HV return bond</td>
+<td>DMM on PSU; <a href="gg-psu-pcb-reverse-engineering.html">gg-psu-pcb-reverse-engineering.md</a></td>
+</tr>
+</tbody></table>
+<hr>
+<p><a href="index.html">← Project home</a> · <a href="gg-psu/index.html">GG-PSU</a> · <a href="gg-pre/index.html">GG-PRE</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zero Zone R-core transformer — R20-TS4803A</title>
+  <link rel="stylesheet" href="../assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="../assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="../index.html">GG kit build docs</a>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../BUILD.html">Build guide</a>
+      <a href="../marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="index.html">← GG-PSU index</a> · <a href="../index.html">Project</a></p>
+<h1>Zero Zone R-core transformer — R20-TS4803A</h1>
+<p>Kit transformer for <strong>GG-PSU</strong> (+ <strong>GG-PRE</strong> load). Label photo <strong>C</strong> (user, 2026-11-09).</p>
+<p><img src="../pcb-photos/transformer/zerozone-r20-ts4803a-label.jpg" alt="Transformer label"></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Brand</strong></td>
+<td>ZEROZONE</td>
+</tr>
+<tr>
+<td><strong>P/N</strong></td>
+<td><strong>R20-TS4803A</strong></td>
+</tr>
+<tr>
+<td><strong>Label note</strong></td>
+<td><code>N: YEL/GRN</code></td>
+</tr>
+<tr>
+<td><strong>Date on label</strong></td>
+<td>2026-9-1 (as printed)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Windings (from label)</h2>
+<table>
+<thead>
+<tr>
+<th>Winding</th>
+<th>Wires</th>
+<th>Rating</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Primary A</td>
+<td><strong>BLK</strong> — <strong>RED</strong></td>
+<td><strong>0–115 V</strong></td>
+</tr>
+<tr>
+<td>Primary B</td>
+<td><strong>GRY</strong> — <strong>ORG</strong></td>
+<td><strong>0–115 V</strong></td>
+</tr>
+<tr>
+<td>Secondary HV A</td>
+<td><strong>YEL</strong></td>
+<td><strong>0–220 V</strong>, <strong>0.034 A</strong></td>
+</tr>
+<tr>
+<td>Secondary HV B</td>
+<td><strong>GRN</strong></td>
+<td><strong>0–220 V</strong>, <strong>0.034 A</strong></td>
+</tr>
+<tr>
+<td>Secondary LV</td>
+<td><strong>BLU</strong></td>
+<td><strong>14 V</strong>, <strong>1 A</strong></td>
+</tr>
+</tbody></table>
+<p><strong>C</strong> = label text. GG-PSU <strong>HV-IN</strong> pin order <strong>U</strong> — buzz or match seller diagram before first power.</p>
+<hr>
+<h2>Mains input wiring</h2>
+<p>Dual <strong>115 V</strong> primaries — <strong>series</strong> for <strong>~230 V</strong> EU mains (<strong>e.g. Netherlands 230 V / 50 Hz</strong> <strong>C</strong>), <strong>parallel</strong> for <strong>~115 V</strong> US mains. Frequency <strong>50 Hz vs 60 Hz</strong> does not change primary strapping on this R-core; use <strong>250 VAC</strong>-rated fuse and inlet.</p>
+<h3>230 V (EU / NL) <strong>C</strong> (user + standard R-core practice)</h3>
+<p>Two <strong>115 V</strong> halves in <strong>series</strong> (~230 V):</p>
+<pre><code>   Mains L ────── BLK
+                    ├── winding A (115 V)
+                 RED ─┬─ GRY
+                        ├── winding B (115 V)
+   Mains N ────── ORG
+</code></pre>
+<p><strong>Junction:</strong> tie <strong>RED</strong> to <strong>GRY</strong> (you remembered this correctly).</p>
+<ul>
+<li><strong>Do not</strong> use the transformer until <strong>RED–GRY</strong> is the only series junction (no BLK/ORG crossed).</li>
+<li>Use a <strong>fuse</strong> in <strong>L</strong> only: <strong>200 mA</strong>, <strong>time-delay (T)</strong>, <strong>≥ 250 VAC</strong>, <strong>5×20 mm</strong> for <strong>230 V</strong> series primary <strong>I</strong> (see <a href="../BUILD.html">BUILD.md §1.0</a>). <strong>Fast (F)</strong> types often nuisance-trip on R-core inrush.</li>
+</ul>
+<h3>115 V (US)</h3>
+<p><strong>Parallel</strong> both halves for <strong>115 V</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Tie together</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>BLK</strong> + <strong>GRY</strong></td>
+<td>One mains side</td>
+</tr>
+<tr>
+<td><strong>RED</strong> + <strong>ORG</strong></td>
+<td>Other mains side</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Outputs → GG-PSU <strong>I</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Transformer</th>
+<th>GG-PSU destination <strong>I</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>YEL</strong> + <strong>GRN</strong> (each <strong>220 VAC</strong> winding)</td>
+<td><strong>HV-IN</strong> / bridge <strong>BR1</strong> and <strong>BR2</strong> AC inputs (one winding per HV channel)</td>
+</tr>
+<tr>
+<td><strong>BLU</strong> (<strong>14 VAC</strong>, <strong>1 A</strong>)</td>
+<td>Filament AC in → <strong>BR3</strong> → <strong>LT1085</strong> → <strong>+12</strong> to GG-PRE</td>
+</tr>
+</tbody></table>
+<p>Label <strong><code>N: YEL/GRN</code></strong>: treat as manufacturer note that the <strong>two HV secondaries</strong> are the paired <strong>220 V</strong> outputs (not chassis neutral). <strong>Common reference</strong> is established on <strong>GG-PSU</strong> when strapping <strong>±200 V</strong> for the preamp — do not assume YEL/GRN centre-tap without a buzz test <strong>U</strong>.</p>
+<p><strong>Filament:</strong> <strong>14 V</strong> AC on <strong>BLU</strong> fits seller guidance (<strong>~14–15 VAC</strong> in for <strong>12.6 V</strong> DC out). Adjust with <strong>VR1 (W202)</strong> on the PSU.</p>
+<hr>
+<h2>Quick system chain</h2>
+<pre><code>230 V mains ──► R20-TS4803A ──► GG-PSU ──► GG-PRE AMP
+              (RED–GRY tie)     ±200 V      audio I/O
+                                +12 V heaters
+</code></pre>
+<hr>
+<h2>Chassis earth (user build <strong>C</strong>)</h2>
+<p>Some R-core units bring out <strong>geel-groen</strong> for core / shield bond. Tie <strong>trafo geel-groen</strong> and <strong>IEC PE</strong> to the <strong>same</strong> chassis safety-earth point (not through the DPST). Audio <strong>star ground</strong> is wired separately later — see <a href="../BUILD.html">BUILD.md §1.0</a> as-built inlet.</p>
+<h2>Safety</h2>
+<ul>
+<li><strong>Mains-voltage</strong> wiring on the primary — strain relief, fuse, correct series/parallel.</li>
+<li><strong>220 VAC</strong> secondaries are <strong>high voltage</strong> — insulated terminations before bench tests.</li>
+<li>Bleed <strong>GG-PSU</strong> capacitors before probing. <strong>±200 V</strong> at preamp is lethal.</li>
+</ul>
+<hr>
+<p><a href="index.html">← GG-PSU index</a> · <a href="../index.html">Project</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

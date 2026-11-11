@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GZLOZONE / Zero Zone GG-PSU — Reverse-Engineered Schematic</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="gg-psu/index.html">← GG-PSU index</a> · <a href="index.html">Project</a></p>
+<h1>GZLOZONE / Zero Zone GG-PSU — Reverse-Engineered Schematic</h1>
+<p>Dual <strong>high-voltage regulated</strong> channels plus <strong>adjustable DC filament</strong> supply for the <a href="gg-pre/index.html">GG-PRE AMP</a> (±200 V + ~12 V). <strong>R1–R6</strong>, caps, and semiconductors user-confirmed <strong>2026-11-09</strong>. <strong>CR1 / right-channel zener P/N</strong> not readable — rebuild uses <strong>200 V + short</strong> per seller <strong>I</strong> (see <a href="gg-psu-component-id.html">gg-psu-component-id.md § BOM freeze</a>).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Board marking</strong></td>
+<td><code>ZERO ZONE</code> · <code>GG-PSU</code></td>
+</tr>
+<tr>
+<td><strong>PCB size (seller)</strong></td>
+<td>130 × 70 mm, 1.6 mm, ~50 µm Cu</td>
+</tr>
+<tr>
+<td><strong>Primary sources</strong></td>
+<td><a href="./pcb-photos/psu/">pcb-photos/psu/</a>; FYFAudio / clone listings</td>
+</tr>
+<tr>
+<td><strong>Paired load</strong></td>
+<td>Grounded-grid preamp: <strong>+200 V</strong>, <strong>−200 V</strong>, <strong>+12 V</strong>, <strong>GND</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Confidence:</strong> <strong>C</strong> confirmed · <strong>I</strong> inferred · <strong>U</strong> unknown — measure before energizing.</p>
+<hr>
+<h2>1. Topology summary</h2>
+<p>The GG-PSU is <strong>not</strong> a simple transformer-in-a-box. It expects an <strong>external toroidal/R-core</strong> with separate HV and LV windings:</p>
+<pre><code>                    ┌─── Transformer ───┐
+                    │  2× HV AC (~220 V class each)     │
+                    │  1× LV AC (~12.6 V class)         │
+                    └─────────┬─────────────────────────┘
+                              │
+         ┌────────────────────┴────────────────────┐
+         │              GG-PSU PCB                  │
+         │  ┌─────────────┐    ┌─────────────┐      │
+         │  │ HV reg #1   │    │ HV reg #2   │      │
+         │  │ bridge→MOS  │    │ bridge→MOS  │      │
+         │  └──────┬──────┘    └──────┬──────┘      │
+         │         │ VDC-OUT +        │ VDC-OUT +   │
+         │         │                  │             │
+         │  ┌──────┴──────────────────┴──────┐      │
+         │  │ Filament: AC→LT1085→DC          │      │
+         │  └────────────────────────────────┘      │
+         └───────────────────────────────────────────┘
+</code></pre>
+<h3>High voltage (×2) <strong>I</strong></h3>
+<p>Each half is structurally similar:</p>
+<ol>
+<li><strong>AC in</strong> from one HV winding (or half of center-tapped scheme — wiring <strong>U</strong> on your transformer).</li>
+<li><strong>Full-wave bridge</strong> <strong>KBP307</strong> (×2 for HV) <strong>C</strong>.</li>
+<li><strong>Bulk filter</strong> — <strong>100 µF / 400 V</strong> per channel <strong>C</strong>.</li>
+<li><strong>Series-pass 2SK2700</strong> (marking <strong>K2700</strong>) on heatsink <strong>C</strong>.</li>
+<li>Voltage reference / feedback using <strong>two D-V zener positions</strong> in series:<br><strong>Vout ≈ Vz1 + Vz2</strong> (seller) <strong>I</strong>. For <strong>200 V</strong> per rail used as ±200 V: <strong>200 V</strong> zener in one site, <strong>short</strong> the other <strong>I</strong>.</li>
+<li><strong>Output cap</strong> and <strong>VDC-OUT</strong> terminal <strong>C</strong>/<strong>I</strong>.</li>
+</ol>
+<p>Pass element is <strong>MOSFET-based</strong>, not a tube — runs warm; seller suggests enough <strong>Vdrop</strong> (~80–100 V ideal) so the pass device has stable bias <strong>I</strong>.</p>
+<h3>Filament / low voltage <strong>I</strong></h3>
+<ol>
+<li><strong>Low AC</strong> in (dedicated winding).</li>
+<li>On-board rectification and filtering (<strong>U</strong> detail).</li>
+<li><strong>LT1085CT</strong> adjustable regulator <strong>C</strong>.</li>
+<li><strong>Trimmer</strong> <strong>W202</strong> (2 kΩ) + <strong>10 µF / 50 V</strong> (?) and <strong>100 µF / 50 V</strong> caps on LV rail <strong>C</strong> / partial <strong>U</strong>.</li>
+<li>LV reservoir <strong>4700 µF / 25 V</strong> (×2) after <strong>BR3</strong> <strong>C</strong> / <strong>I</strong>.</li>
+<li><strong>LED</strong> indicator <strong>C</strong>.</li>
+<li>Output <strong>~3.5–12.6 V DC</strong> (set for <strong>12.6 V</strong> or <strong>6.3 V</strong> depending on heater plan) <strong>I</strong>.</li>
+</ol>
+<p>Seller: <strong>≤~40 mA</strong> per HV channel with default heatsinks; filament <strong>up to ~1–1.5 A</strong> class <strong>I</strong>.</p>
+<hr>
+<h2>2. Forming ±200 V from two HV channels <strong>C</strong> / <strong>I</strong></h2>
+<p><strong>As-built silk <strong>C</strong>:</strong> 4-screw <strong>VDC-OUT</strong> = two pairs <code>−</code> <code>+</code> <code>−</code> <code>+</code> (top→bottom); filament <strong>HR-X</strong> <code>−</code> <code>+</code>. Full checklist + measured columns: <a href="BUILD.html#25-high-voltage--strap-silk-accurate--easy-to-get-wrong">BUILD.md §2.5</a>.</p>
+<p>Each pair is a floating ~+200 V regulator. Series them for bipolar rails (<strong>do not</strong> tie all minuses to ground):</p>
+<pre><code>Top VDC-OUT + ──────────────────────────► PRE +200V     (~+200 V vs GND)
+
+Top VDC-OUT − ──┐
+Bottom VDC-OUT + ─┼── join at PSU ──────► PRE GND       (midpoint)
+HR-X − ───────────┘
+
+Bottom VDC-OUT − ───────────────────────► PRE −200V     (~−200 V vs GND)
+
+HR-X + ─────────────────────────────────► PRE +12       (~+12–12.6 V vs GND)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Expected</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+200 vs GND</td>
+<td>~+200 V DC</td>
+</tr>
+<tr>
+<td>−200 vs GND</td>
+<td>~−200 V DC</td>
+</tr>
+<tr>
+<td>+200 vs −200</td>
+<td>~400 V DC</td>
+</tr>
+<tr>
+<td>HR-X + vs GND</td>
+<td>~12.0–12.6 V DC</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Connectors (working table)</h2>
+<h3>HV-IN (4-pin, bottom) <strong>C</strong> label</h3>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Net (proposed)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1–4</td>
+<td><strong>AC_HV_A</strong>, <strong>AC_HV_B</strong>, …</td>
+<td>Map to BR1/BR2 AC inputs <strong>U</strong></td>
+</tr>
+</tbody></table>
+<h3>VDC-OUT (4-screw block = 2× <code>−</code>/<code>+</code>) <strong>C</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Screw (top→bottom)</th>
+<th>Role when strapped for ±200 V <strong>C</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>−</code></td>
+<td>→ <strong>GND</strong> midpoint (with bottom <code>+</code> and HR-X <code>−</code>)</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>→ PRE <strong><code>+200V</code></strong></td>
+</tr>
+<tr>
+<td><code>−</code></td>
+<td>→ PRE <strong><code>−200V</code></strong></td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>→ <strong>GND</strong> midpoint</td>
+</tr>
+</tbody></table>
+<p>Read silk along board edge <strong>C</strong> (<a href="./pcb-photos/psu/04-overview-vdc-out.jpg">04-overview-vdc-out.jpg</a>). Channels may be swapped; rule: <strong>one <code>−</code> and the other <code>+</code> form GND</strong>.</p>
+<h3>Filament <strong>HR-X</strong> DC out <strong>C</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Screw</th>
+<th>Net <strong>C</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>−</code></td>
+<td>Filament return → join to HV <strong>GND</strong> midpoint → PRE <strong><code>GND</code></strong></td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td><strong>+V_FIL</strong> → PRE <strong><code>+12</code></strong> (set ~12.6 V)</td>
+</tr>
+</tbody></table>
+<p>AC filament in is a separate 2-pin block (<strong>AC-F</strong> / similar) from the trafo <strong>BLU</strong> winding <strong>I</strong>.</p>
+<hr>
+<h2>4. One HV channel (netlist style)</h2>
+<p>Reference designators are <strong>assigned for this document</strong>. Values <strong>U</strong> unless noted.</p>
+<pre><code>AC_IN_x ──► BRx (~) ──► +RAW ──┬──► C_bulk+  (400 V, U µF) **C** class
+              │               │
+              └──► -RAW ──────┴──► C_bulk-  (to GND_RAW)
+
++RAW ──► Qx (N-MOS drain) ──► +REG ──┬──► C_out+ ──► VDC-OUT (+)
+                                    │
+              Gate/source network ◄─┤  R_low + R_hi (220 Ω + 47 kΩ per channel **C**)
+                                    │
+              Vref ◄── (D-V1)+(D-V2) zener stack **I**
+
+GND_RAW / signal GND ──► returns, divider refs **U**
+</code></pre>
+<p>Third bridge <strong>BR3</strong> (<strong>KBP307</strong>) serves filament / LV rectification <strong>C</strong> / <strong>I</strong>. Second HV channel duplicates with <strong>BR2</strong>, <strong>Q2</strong>, <strong>VDC-OUT</strong> pair.</p>
+<h3>Filament subsection <strong>I</strong></h3>
+<pre><code>AC_FIL ──► BR3 (KBP307) ──► +DC_RAW ──► C7,C8 (4700 µF/25 V) ──► U1 (LT1085 IN)
+                                              │
+                                         C10 (10 µF/50 V)
+
+U1 OUT ──► +V_FIL ──► (to GG-PRE +12)
+           │
+           ├── C9 (100 µF/50 V)
+           └── LED1 ── R1 (100 Ω) ──► return
+
+ADJ ◄── divider + VR1 (W202 2 kΩ) + R2 (10 kΩ) + (other **U** if any)
+</code></pre>
+<hr>
+<h2>5. BOM table (user-confirmed 2026-11-09)</h2>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Qty</th>
+<th>Value</th>
+<th>Notes</th>
+<th>Conf</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BR1–BR3</td>
+<td>3</td>
+<td><strong>KBP307</strong></td>
+<td>2× HV + 1× LV <strong>I</strong></td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>Q1, Q2</td>
+<td>2</td>
+<td><strong>2SK2700</strong> (<code>K2700</code> / <code>8S</code>)</td>
+<td>HV pass</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>U1</td>
+<td>1</td>
+<td><strong>LT1085CT</strong> (<code>241228</code>)</td>
+<td>Filament reg</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>D-V @ <strong>D-11</strong></td>
+<td>1</td>
+<td><strong>wire short</strong></td>
+<td>Second zener site strapped <strong>C</strong> photo</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>D-V (other)</td>
+<td>1</td>
+<td><strong>U</strong></td>
+<td>e.g. <strong>200 V</strong> 5 W zener for GG ±200 V</td>
+<td><strong>U</strong></td>
+</tr>
+<tr>
+<td>D1, D2</td>
+<td>2</td>
+<td><strong>RR23</strong> marking</td>
+<td><strong>FR207</strong>-class <strong>2 A / 1 kV</strong> <strong>I</strong> equiv.</td>
+<td><strong>C</strong> <strong>D2</strong> mark + DMM</td>
+</tr>
+<tr>
+<td>C1, C2</td>
+<td>2</td>
+<td><strong>100 µF / 400 V</strong></td>
+<td>HV bulk (large blue)</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>C3–C6</td>
+<td>4</td>
+<td><strong>10 µF / 400 V</strong></td>
+<td>HV secondary (brown)</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>C7, C8</td>
+<td>2</td>
+<td><strong>4700 µF / 25 V</strong></td>
+<td>LV reservoir (large brown)</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>C9</td>
+<td>1</td>
+<td><strong>100 µF / 50 V</strong></td>
+<td>Dark blue</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>C10</td>
+<td>1</td>
+<td><strong>10 µF / 50 V</strong></td>
+<td>Small blue, near <strong>U1</strong></td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>VR1</td>
+<td>1</td>
+<td><strong>2 kΩ</strong> trim <strong>W202</strong></td>
+<td>Filament adjust</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>LED1</td>
+<td>1</td>
+<td>Blue LED</td>
+<td>+ <strong>R_led U</strong></td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>R1</td>
+<td>1</td>
+<td><strong>100 Ω</strong></td>
+<td>LED1 series</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>R2</td>
+<td>1</td>
+<td><strong>10 kΩ</strong></td>
+<td>Near <strong>U1</strong> / LV</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>R3, R5</td>
+<td>2</td>
+<td><strong>220 Ω</strong></td>
+<td>HV channels (with 47 k pair)</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>R4, R6</td>
+<td>2</td>
+<td><strong>47 kΩ</strong></td>
+<td>HV channels (mirror)</td>
+<td><strong>C</strong></td>
+</tr>
+</tbody></table>
+<p>Full map: <a href="gg-psu-component-id.html">gg-psu-component-id.md</a>.</p>
+<hr>
+<h2>6. Power budget (rebuild checklist)</h2>
+<table>
+<thead>
+<tr>
+<th>Rail</th>
+<th>Target (GG-PRE)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+200 V DC</td>
+<td><strong>~200 V</strong> regulated</td>
+<td>Set via D-V zeners + trim <strong>U</strong></td>
+</tr>
+<tr>
+<td>−200 V DC</td>
+<td><strong>~200 V</strong> regulated</td>
+<td>Other HV channel, common centertap <strong>I</strong></td>
+</tr>
+<tr>
+<td>Heaters</td>
+<td><strong>+12 V</strong> silk on preamp (12.6 V class)</td>
+<td>3× 12AU7 series string ≈150 mA <strong>I</strong></td>
+</tr>
+<tr>
+<td>HV current</td>
+<td><strong>≥15 mA</strong> reserve per rail <strong>I</strong>; preamp load ~tens of mA</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>Safety:</strong> <strong>400 V</strong> capacitors see <strong>mains-derived</strong> energy. Use discharge resistor / verified bleeder. <strong>Lethal voltages.</strong> Confirm transformer phasing and strap before connecting GG-PRE.</p>
+<p><strong>Transformer:</strong> kit <strong>R20-TS4803A</strong> — <a href="gg-psu/transformer.html">transformer.md</a> (<strong>230 V:</strong> <strong>RED–GRY</strong> tie <strong>C</strong>). Also see <a href="https://www.lencoheaven.net/forum/index.php?topic=35914.0">LencoHeaven GG build</a> <strong>I</strong>.</p>
+<hr>
+<h2>7. Assumptions and uncertainties</h2>
+<ol>
+<li><strong>Compact GG-PSU</strong> is the mate for your GG-PRE; <strong>wide board</strong> in <a href="./pcb-photos/psu/01-overview-wide-variant.jpg">01-overview-wide-variant.jpg</a> may be a different product — <strong>U</strong>.</li>
+<li><strong>Zener ratings</strong> and <strong>D1/D2</strong> types are <strong>U</strong> (resistors <strong>R1–R6</strong> confirmed).</li>
+<li><strong>Per-cap ref → PCB location</strong> (C3–C10) is <strong>I</strong> until traced.</li>
+<li><strong>Filament ground</strong> may be intentionally isolated from HV ground on PCB — hum / bonding is user-dependent <strong>U</strong>.</li>
+<li><strong>Pin-exact connector tables</strong> need continuity from your physical board.</li>
+<li>Listing claims (40 mA HV, 1 A LV) are <strong>I</strong> — not measured on your build.</li>
+</ol>
+<h3>Recommended verification</h3>
+<ol>
+<li>Transformer off: resistance on all secondaries; document colors.</li>
+<li>Buzz <strong>HV-IN</strong> → bridges; <strong>VDC-OUT</strong> → cap + output polarity.</li>
+<li>With <strong>current-limited</strong> bench supply on one channel at a time: confirm reg behavior before full AC.</li>
+<li>Fill <a href="gg-psu-component-id.html">gg-psu-component-id.md</a>; update SVG.</li>
+</ol>
+<hr>
+<h2>8. Companion visual</h2>
+<p>Block schematic (caps/MOS/reg confirmed; resistors TBD):</p>
+<ul>
+<li><a href="./gg-psu-schematic.svg"><code>gg-psu-schematic.svg</code></a></li>
+</ul>
+<hr>
+<h2>9. Source photos</h2>
+<ul>
+<li><a href="./pcb-photos/psu/">pcb-photos/psu/</a></li>
+</ul>
+<p>Detailed visual pass: <a href="gg-psu-pcb-reverse-engineering.html">gg-psu-pcb-reverse-engineering.md</a></p>
+<hr>
+<p><a href="gg-psu/index.html">← GG-PSU index</a> · <a href="index.html">Project</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

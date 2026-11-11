@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620">
+  <title>GG-PRE AMP one channel - hand-drawn style (IN-R / V1 / V3)</title>
+  <desc>Zero Zone grounded-grid clone. Values C from gg-pre-component-id. Topology I.</desc>
+
+  <defs>
+    <style type="text/css"><![CDATA[
+      .paper { fill: #f8f6f1; }
+      .ink { fill: none; stroke: #3a3a3a; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+      .ink-fill { fill: #3a3a3a; stroke: none; }
+      .rail-p { stroke: #6b2d2d; stroke-width: 1.6; fill: none; }
+      .rail-n { stroke: #2a4470; stroke-width: 1.6; fill: none; }
+      .h { font: 400 17px Segoe Print, Segoe UI, sans-serif; fill: #1e1e1e; }
+      .t { font: 400 14px Segoe Print, Segoe UI, sans-serif; fill: #1e1e1e; }
+      .s { font: 400 12px Segoe UI, sans-serif; fill: #4a4a4a; }
+    ]]></style>
+  </defs>
+
+  <rect class="paper" width="1000" height="620"/>
+
+  <text class="h" x="36" y="40">GG-PRE AMP  -  one channel (IN-R)  -  CF / GG / CF</text>
+  <text class="s" x="36" y="62">3x 12AU7 total; V1 + half V3 shown. L channel = V2 mirror. Heaters / decoupling omitted.</text>
+
+  <!-- rails -->
+  <path class="rail-p" d="M 40 88 L 780 88"/>
+  <text class="t" x="44" y="82">+200 V</text>
+  <path class="rail-n" d="M 40 548 L 780 548"/>
+  <text class="t" x="44" y="568">-200 V</text>
+  <path class="ink" d="M 40 480 L 500 480"/>
+  <text class="t" x="44" y="474">GND</text>
+
+  <!-- IN -->
+  <circle class="ink" cx="88" cy="280" r="20"/>
+  <circle class="ink-fill" cx="88" cy="280" r="3"/>
+  <text class="t" x="52" y="318">IN-R</text>
+  <path class="ink" d="M 108 280 L 155 280"/>
+  <text class="s" x="118" y="272">R2 10k</text>
+
+  <!-- R1 leak to GND -->
+  <path class="ink" d="M 200 280 L 200 340"/>
+  <text class="s" x="158" y="308">R1 50k</text>
+  <path class="ink" d="M 200 340 L 200 478"/>
+
+  <!-- V1 -->
+  <circle class="ink" cx="280" cy="280" r="52"/>
+  <text class="t" x="238" y="274">V1</text>
+  <text class="s" x="232" y="292">12AU7</text>
+  <text class="s" x="218" y="334">in CF + GG</text>
+  <path class="ink" d="M 155 280 L 228 280"/>
+  <path class="ink" d="M 228 280 L 228 268 L 238 268"/>
+  <path class="ink" d="M 228 280 L 228 292 L 238 292"/>
+  <!-- plate to B+ -->
+  <path class="ink" d="M 280 228 L 280 88"/>
+  <text class="s" x="288" y="160">plate loads R1/R3 region</text>
+  <!-- cathode -->
+  <path class="ink" d="M 280 332 L 280 400"/>
+  <text class="s" x="288" y="372">R5 30k</text>
+  <path class="ink" d="M 280 400 L 280 548"/>
+
+  <!-- GG grid at GND I -->
+  <path class="ink" d="M 300 300 L 360 300 L 360 480"/>
+  <text class="s" x="312" y="292">G -- AC GND (I)</text>
+
+  <!-- couple V1 to V3 -->
+  <path class="ink" d="M 332 240 L 430 240"/>
+  <text class="s" x="350" y="232">couple (I)</text>
+
+  <!-- V3 half -->
+  <circle class="ink" cx="520" cy="280" r="50"/>
+  <text class="t" x="488" y="276">V3</text>
+  <text class="s" x="468" y="294">out CF</text>
+  <path class="ink" d="M 430 240 L 470 255 L 470 268"/>
+  <path class="ink" d="M 520 230 L 520 88"/>
+  <path class="ink" d="M 470 268 L 500 280"/>
+  <!-- cathode R11 R9 chain simplified -->
+  <path class="ink" d="M 520 330 L 520 388"/>
+  <text class="s" x="528" y="358">R11 20k</text>
+  <path class="ink" d="M 520 388 L 580 388 L 580 420"/>
+  <text class="s" x="528" y="414">R9 3k (I net)</text>
+  <path class="ink" d="M 580 420 L 580 548"/>
+
+  <!-- Cout -->
+  <path class="ink" d="M 570 280 L 620 280"/>
+  <path class="ink" d="M 628 262 L 628 298"/>
+  <path class="ink" d="M 644 262 L 644 298"/>
+  <text class="s" x="648" y="282">1.0 uF</text>
+  <path class="ink" d="M 644 280 L 710 280"/>
+
+  <!-- OUT -->
+  <circle class="ink" cx="752" cy="280" r="20"/>
+  <circle class="ink-fill" cx="752" cy="280" r="3"/>
+  <text class="t" x="712" y="318">OUT-R</text>
+
+  <!-- R13 -->
+  <path class="ink" d="M 710 280 L 710 400"/>
+  <text class="s" x="718" y="340">R13 100k</text>
+  <path class="ink" d="M 710 400 L 710 480"/>
+
+  <!-- HV decoupling note -->
+  <path class="ink" d="M 120 120 L 120 200"/>
+  <path class="ink" d="M 112 200 L 128 200"/>
+  <path class="ink" d="M 106 208 L 134 208"/>
+  <text class="s" x="136" y="188">Cdec 10 uF/450 V (x2)</text>
+  <text class="s" x="136" y="204">silk 22 uF</text>
+
+  <!-- Power terminal sketch -->
+  <rect class="ink" x="820" y="120" width="150" height="140" rx="4"/>
+  <text class="t" x="836" y="148">POWER</text>
+  <text class="s" x="836" y="172">-200 V</text>
+  <text class="s" x="836" y="192">+12</text>
+  <text class="s" x="836" y="212">+200 V</text>
+  <text class="s" x="836" y="232">GND</text>
+  <text class="s" x="836" y="252">from GG-PSU</text>
+
+  <text class="s" x="36" y="600">Ref: gg-pre-amp-schematic.md  |  Not Marantz 7</text>
+</svg>

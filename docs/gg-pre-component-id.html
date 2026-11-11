@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GG-PRE AMP — Component ID</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="gg-pre/index.html">← GG-PRE index</a> · <a href="index.html">Project</a></p>
+<h1>GG-PRE AMP — Component ID</h1>
+<p>Sources: close-ups in <code>pcb-photos/closeups/</code>; resistor numbering photo (user-measured values, 2026-11-09).</p>
+<p>All resistors: blue 5-band metal film, <strong>1%</strong> (brown tolerance band) unless noted.</p>
+<p><strong>Wattage column:</strong> estimated from body length/diameter on the board vs neighbors (not from body print). Chinese kits often use <strong>~2 W</strong> for the fatter/longest HV plate loads and <strong>~1 W</strong> for the standard blue bodies. Treat as rebuild guidance; verify part marking if available.</p>
+<h2>Resistor reference photo (R1–R14)</h2>
+<p>Ink numbers on the component side match the table below.</p>
+<p><img src="./pcb-photos/component-side-resistors-numbered.jpg" alt="GG-PRE AMP resistor numbering R1–R14"></p>
+<p>Download / path: <a href="./pcb-photos/component-side-resistors-numbered.jpg">component-side-resistors-numbered.jpg</a></p>
+<hr>
+<h2>Resistor BOM (R1–R14) — confirmed values</h2>
+<p>Layout on component side (matches user ink numbers):</p>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Ω</th>
+<th>Est. power</th>
+<th>Size (visual)</th>
+<th>Board region</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>R1</strong></td>
+<td>50 k</td>
+<td><strong>~2 W</strong></td>
+<td>Large (fat body, long)</td>
+<td>Top, near V1 / IN-R side</td>
+</tr>
+<tr>
+<td><strong>R2</strong></td>
+<td>10 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard</td>
+<td>Top center, near input block</td>
+</tr>
+<tr>
+<td><strong>R3</strong></td>
+<td>50 k</td>
+<td><strong>~2 W</strong></td>
+<td>Large</td>
+<td>Top, near V2 / power side</td>
+</tr>
+<tr>
+<td><strong>R4</strong></td>
+<td>10 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard</td>
+<td>Top right, near power terminal</td>
+</tr>
+<tr>
+<td><strong>R5</strong></td>
+<td>30 k</td>
+<td><strong>~2 W</strong></td>
+<td>Large / long horizontal</td>
+<td>Mid, left of V3</td>
+</tr>
+<tr>
+<td><strong>R6</strong></td>
+<td>30 k</td>
+<td><strong>~2 W</strong></td>
+<td>Large / long horizontal</td>
+<td>Mid, right of V3</td>
+</tr>
+<tr>
+<td><strong>R7</strong></td>
+<td>10 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard</td>
+<td>Mid, below R5</td>
+</tr>
+<tr>
+<td><strong>R8</strong></td>
+<td>10 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard</td>
+<td>Mid, below R6</td>
+</tr>
+<tr>
+<td><strong>R9</strong></td>
+<td>3 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard</td>
+<td>Mid, below R7</td>
+</tr>
+<tr>
+<td><strong>R10</strong></td>
+<td>3 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard</td>
+<td>Mid, below R8</td>
+</tr>
+<tr>
+<td><strong>R11</strong></td>
+<td>20 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard (tall mount)</td>
+<td>Lower, above Cout-R</td>
+</tr>
+<tr>
+<td><strong>R12</strong></td>
+<td>20 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard (tall mount)</td>
+<td>Lower, above Cout-L</td>
+</tr>
+<tr>
+<td><strong>R13</strong></td>
+<td>100 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard vertical</td>
+<td>Bottom left / OUT-R string</td>
+</tr>
+<tr>
+<td><strong>R14</strong></td>
+<td>100 k</td>
+<td><strong>~1 W</strong></td>
+<td>Standard vertical</td>
+<td>Bottom right / OUT-L string</td>
+</tr>
+</tbody></table>
+<h3>Value summary (qty)</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Qty</th>
+<th>Refs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>50 kΩ</td>
+<td>2</td>
+<td>R1, R3</td>
+</tr>
+<tr>
+<td>30 kΩ</td>
+<td>2</td>
+<td>R5, R6</td>
+</tr>
+<tr>
+<td>20 kΩ</td>
+<td>2</td>
+<td>R11, R12</td>
+</tr>
+<tr>
+<td>10 kΩ</td>
+<td>4</td>
+<td>R2, R4, R7, R8</td>
+</tr>
+<tr>
+<td>3 kΩ</td>
+<td>2</td>
+<td>R9, R10</td>
+</tr>
+<tr>
+<td>100 kΩ</td>
+<td>2</td>
+<td>R13, R14</td>
+</tr>
+</tbody></table>
+<p>Stereo symmetry: each value appears in an L/R pair except the shared mid column (R5–R10 are paired L/R).</p>
+<h3>Wattage sizing notes</h3>
+<table>
+<thead>
+<tr>
+<th>Visual class</th>
+<th>Typical body on this PCB</th>
+<th>Refs</th>
+<th>Typical use on ±200 V GG stages (<strong>I</strong>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>~2 W</strong></td>
+<td>Noticeably thicker/longer than the small blues; similar scale to socket ceramic ring</td>
+<td>R1, R3, R5, R6</td>
+<td>Plate / HV anode loads (higher dissipation)</td>
+</tr>
+<tr>
+<td><strong>~1 W</strong></td>
+<td>“Normal” blue metal-film axial (most of the board)</td>
+<td>R2, R4, R7–R14</td>
+<td>Grid leaks, cathode bias, feedback, input series</td>
+</tr>
+</tbody></table>
+<p>Dissipation on ±200 V depends on actual bias (measure on a built unit). If a 1 W part runs hot, step up to 2 W of the same value.</p>
+<hr>
+<h2>Capacitors (confirmed from body print)</h2>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Location</th>
+<th>Installed</th>
+<th>Silk</th>
+<th>Conf</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CoutR</td>
+<td>Bottom-left / OUT-R</td>
+<td><strong>ARCOTRONICS MKP C.4G · 1.0 µF ±5% · Un 250 V~</strong></td>
+<td>outline</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>CoutL</td>
+<td>Bottom-right / OUT-L</td>
+<td>Same as CoutR</td>
+<td>outline</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>Cdec (left)</td>
+<td>Mid-left</td>
+<td><strong>EPCOS B43588-S5106-T… · 10 µF · 450 V</strong></td>
+<td><code>22UF-250V</code></td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>Cdec (right)</td>
+<td>Mid-right</td>
+<td>Same / 10 µF 450 V</td>
+<td><code>22UF-250V</code></td>
+<td><strong>C</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Superseded photo-only guesses</h2>
+<p>Earlier band reads (300 kΩ, 300 Ω, 1 kΩ, 120 Ω / 12 kΩ conflicts) are replaced by the <strong>R1–R14 table above</strong> where they differ.</p>
+<hr>
+<h2>Still useful to meter</h2>
+<ol>
+<li>Heater wiring: pins 4/5/9 ↔ <code>+12</code> / <code>GND</code> (series vs parallel).</li>
+<li>Which electrolytic <code>+</code> pad ties to <code>+200V</code> vs <code>-200V</code>.</li>
+<li>Buzz-out: map each R1–R14 to exact tube pin / net (topology still <strong>I</strong>).</li>
+</ol>
+<hr>
+<h2>Close-up photo index</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Region</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>closeups/01-electrolytic-epcos.jpg</code></td>
+<td>Right HV electrolytic + nearby R</td>
+</tr>
+<tr>
+<td><code>closeups/02-brand-out-area.jpg</code></td>
+<td>Brand + mid resistors</td>
+</tr>
+<tr>
+<td><code>closeups/03-out-l-film.jpg</code></td>
+<td>CoutL</td>
+</tr>
+<tr>
+<td><code>closeups/04-out-l-resistors.jpg</code></td>
+<td>OUT-L resistor pair</td>
+</tr>
+<tr>
+<td><code>closeups/05-center-v3-resistors.jpg</code></td>
+<td>Center stack</td>
+</tr>
+<tr>
+<td><code>closeups/06-input-terminal.jpg</code></td>
+<td>Input terminal</td>
+</tr>
+<tr>
+<td><code>closeups/07-sockets-center.jpg</code></td>
+<td>V1/V3 sockets</td>
+</tr>
+<tr>
+<td><code>closeups/08-out-r-area.jpg</code></td>
+<td>OUT-R area</td>
+</tr>
+</tbody></table>
+<hr>
+<p><a href="gg-pre/index.html">← GG-PRE index</a> · <a href="index.html">Project</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

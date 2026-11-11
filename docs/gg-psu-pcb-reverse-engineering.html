@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zero Zone / GZLOZONE GG-PSU — Visual Reverse-Engineering Report</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="gg-psu/index.html">← GG-PSU index</a> · <a href="index.html">Project</a></p>
+<h1>Zero Zone / GZLOZONE GG-PSU — Visual Reverse-Engineering Report</h1>
+<p><strong>Board:</strong> GG-PSU only — feeds <a href="gg-pre/index.html">GG-PRE</a>.</p>
+<p>Source photos: <a href="./pcb-photos/psu/">pcb-photos/psu/</a>. Prefer <strong>UNKNOWN</strong> over invented values — exact BOM to be filled in when you measure parts.</p>
+<p><strong>Legend:</strong> CONFIRMED = readable silkscreen / clear visual feature. INFERRED = topology-consistent but not fully traced. UNKNOWN = not determinable from these photos.</p>
+<hr>
+<h2>0. Which board is in these photos?</h2>
+<table>
+<thead>
+<tr>
+<th>Board</th>
+<th>Evidence</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GG-PSU</strong> (compact HV + filament)</td>
+<td>Silk <strong>GG-PSU</strong>, <strong>N-MOS</strong>, <strong>HV-IN</strong>, <strong>LT1085/LM317</strong> — see <a href="./pcb-photos/psu/06-overview-gg-psu.jpg">06-overview-gg-psu.jpg</a>, <a href="./pcb-photos/psu/07-closeup-silkscreen-regulators.jpg">07-closeup-silkscreen-regulators.jpg</a></td>
+<td>Seller size <strong>130 × 70 mm</strong>; pairs with <a href="gg-pre/index.html">GG-PRE AMP</a></td>
+</tr>
+<tr>
+<td><strong>Wide / alternate PSU</strong></td>
+<td><a href="./pcb-photos/psu/01-overview-wide-variant.jpg">01-overview-wide-variant.jpg</a> shows <strong>three</strong> large heatsinks and <strong>AC-IN / DC-OUT</strong> style labels, different aspect ratio</td>
+<td><strong>U</strong> — may be another Zero Zone SKU (some reads say “SG-PSU”). Treat as related reference until silkscreen is re-read on your unit</td>
+</tr>
+</tbody></table>
+<p>This report focuses on <strong>GG-PSU</strong> wiring for the grounded-grid preamp; the wide board is noted where layout clearly differs.</p>
+<hr>
+<h2>1. ORIENTATION</h2>
+<h3>Solder-side vs component-side</h3>
+<ul>
+<li><strong>Best match: horizontal mirror (flip like a book page).</strong> Top/bottom stay fixed; left ↔ right swap.</li>
+<li>Evidence: <a href="./pcb-photos/psu/solder-side.jpg">solder-side.jpg</a> shows the same <strong>tall narrow</strong> outline as GG-PSU overviews; thick oval pads for large electros line up with blue/brown caps on the component side after hflip.</li>
+<li>Mounting holes: four corners + one large hole along bottom edge on solder side <strong>CONFIRMED</strong>.</li>
+</ul>
+<h3>Functional regions (GG-PSU, component side)</h3>
+<p>Rough <strong>top → bottom</strong> (photo <a href="./pcb-photos/psu/06-overview-gg-psu.jpg">06-overview-gg-psu.jpg</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>What’s there</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Top</strong></td>
+<td>Two <strong>N-MOS</strong> heatsinks, small electros, trimmers, 2-pin / 4-pin green terminals</td>
+</tr>
+<tr>
+<td><strong>Center</strong></td>
+<td>Symmetric resistor/diode clusters, medium brown electros</td>
+</tr>
+<tr>
+<td><strong>Bottom</strong></td>
+<td><strong>Three</strong> <strong>KBP307</strong> bridges (2× HV + 1× LV <strong>I</strong>), <strong>100 µF / 400 V</strong> blue caps, <strong>HV-IN</strong> 4-pin terminal</td>
+</tr>
+</tbody></table>
+<p>Left/right on <a href="./pcb-photos/psu/04-overview-vdc-out.jpg">04-overview-vdc-out.jpg</a> emphasizes <strong>VDC-OUT</strong> 3-pin blocks and <strong>+/−</strong> polarity silk along the board edge.</p>
+<hr>
+<h2>2. CONNECTORS (GG-PSU)</h2>
+<p>Silkscreen is partially obscured by parts; assignments below combine <strong>CONFIRMED</strong> labels with <strong>INFERRED</strong> pin order (verify on your board).</p>
+<h3>HV-IN — 4-pin green terminal (bottom center) <strong>C</strong> label / <strong>I</strong> pin order</h3>
+<ul>
+<li>Intended for <strong>transformer high-voltage AC</strong> (seller examples: 2× ~220 VAC windings).</li>
+<li>Photo shows <strong>“HV-IN”</strong> repeated near this block <strong>C</strong>.</li>
+<li>Exact pin-to-winding map <strong>U</strong> — buzz from each pin to its bridge AC pads.</li>
+</ul>
+<h3>High-voltage outputs — 3-pin terminal blocks (board edge) <strong>C</strong> / <strong>I</strong></h3>
+<ul>
+<li>Silk <strong>VDC-OUT</strong> (or <strong>V-OUT</strong>) <strong>C</strong> on <a href="./pcb-photos/psu/04-overview-vdc-out.jpg">04-overview-vdc-out.jpg</a>.</li>
+<li>Polarity <strong>+</strong> and <strong>−</strong> printed along edge <strong>C</strong>.</li>
+<li><strong>Two</strong> regulated HV channels (left/right symmetry) <strong>I</strong> → for ±200 V operation, seller instructs tying <strong>positive</strong> of one channel and <strong>negative</strong> of the other to <strong>GND</strong>, feeding the preamp as +200 V / −200 V <strong>I</strong> (see schematic doc).</li>
+</ul>
+<h3>Filament / low-voltage input — <strong>I</strong></h3>
+<ul>
+<li>Separate <strong>AC-IN</strong> (or low-V AC) terminals <strong>C</strong> near <a href="./pcb-photos/psu/07-closeup-silkscreen-regulators.jpg">07-closeup-silkscreen-regulators.jpg</a>.</li>
+<li><strong>LT1085/LM317</strong> region on left <strong>C</strong> silk → adjustable DC heater supply <strong>I</strong>.</li>
+</ul>
+<h3>Filament / low-voltage output — <strong>I</strong></h3>
+<ul>
+<li>Typically 2-pin screw terminal near filament regulator and <strong>LED</strong> (<a href="./pcb-photos/psu/03-closeup-filament-led.jpg">03-closeup-filament-led.jpg</a>).</li>
+<li>Feeds <strong>+12</strong> (or 6.3 V / 12.6 V set) to <a href="gg-pre-amp-schematic.html">GG-PRE power pin 2</a> <strong>I</strong>.</li>
+</ul>
+<h3>Brand block <strong>C</strong></h3>
+<ul>
+<li><code>ZERO ZONE</code> / <code>GG-PSU</code> on right edge (<a href="./pcb-photos/psu/06-overview-gg-psu.jpg">06-overview-gg-psu.jpg</a>).</li>
+</ul>
+<hr>
+<h2>3. ACTIVE CIRCUIT BLOCKS</h2>
+<h3>3.1 Dual high-voltage channel (×2, symmetric) <strong>I</strong></h3>
+<p>Each channel, left and right halves of the PCB:</p>
+<pre><code>AC (HV-IN) ──► Bridge (2A) ──► C_bulk (400 V class) ──► N-MOS pass ──► C_out ──► VDC-OUT (+)
+                                                                    │
+                                              Zener stack (D-V) ◄───┘
+</code></pre>
+<p><strong>CONFIRMED elements per channel:</strong></p>
+<ul>
+<li><strong>Bridge rectifier</strong> — <strong>KBP307</strong> (×3 on board) <strong>C</strong> user; silk <strong>2A</strong> is generic (<a href="./pcb-photos/psu/02-closeup-rectifier-caps.jpg">02-closeup-rectifier-caps.jpg</a>).</li>
+<li><strong>2SK2700</strong> (<code>K2700</code>) on finned heatsink, silk <strong>N-MOS</strong> <strong>C</strong> user.</li>
+<li><strong>Large blue electrolytic(s)</strong> — <strong>100 µF / 400 V</strong> (×2) <strong>C</strong> user (<a href="./pcb-photos/psu/06-overview-gg-psu.jpg">06-overview-gg-psu.jpg</a>).</li>
+</ul>
+<p><strong>INFERRED regulation:</strong></p>
+<ul>
+<li>Seller documentation: high voltage = sum of two <strong>D-V</strong> zener positions (5 W class); at <strong>200 V</strong>, install <strong>200 V</strong> in one site and <strong>short</strong> the other <strong>I</strong>.</li>
+<li>MOSFET provides series pass / drop; recommend <strong>≥50–80 V</strong> headroom from raw rectified rail to output <strong>I</strong> (seller note).</li>
+</ul>
+<p><strong>UNKNOWN on this PCB instance:</strong></p>
+<ul>
+<li>Exact MOSFET type.</li>
+<li>All resistor values in the HV feedback / gate network.</li>
+<li>Which 3-pin terminal is “HV1” vs “HV2” without continuity.</li>
+</ul>
+<h3>3.2 Filament / auxiliary low-voltage <strong>I</strong></h3>
+<pre><code>AC (low-V winding) ──► rectifier/filter (on-board) ──► LT1085 or LM317 ──► trim ──► DC out (+12 class)
+                                                              │
+                                                           C (10U silk)
+                                                              │
+                                                            LED + series R
+</code></pre>
+<p><strong>CONFIRMED:</strong></p>
+<ul>
+<li><strong>LT1085CT</strong> (<code>241228</code>) installed; silk allows LM317 footprint (<a href="./pcb-photos/psu/07-closeup-silkscreen-regulators.jpg">07-closeup-silkscreen-regulators.jpg</a>) <strong>C</strong> user.</li>
+<li>Blue multi-turn trimmer; silk <strong>W202</strong> → standard <strong>2 kΩ</strong> trim pot part code <strong>I</strong> (not necessarily divider values).</li>
+<li>Silk <strong>10U</strong> near small blue cap (<a href="./pcb-photos/psu/03-closeup-filament-led.jpg">03-closeup-filament-led.jpg</a>).</li>
+<li><strong>LED</strong> + resistor near filament section <strong>C</strong> label.</li>
+</ul>
+<p><strong>INFERRED (seller):</strong></p>
+<ul>
+<li>Output <strong>~3.5–12.6 V DC</strong> adjustable; <strong>12.6 V</strong> for 12AU7 series heaters when GG-PRE is used.</li>
+<li>Input often <strong>~14–15 VAC</strong> for 12.6 V out (transformer 2×6.3 V in series) <strong>I</strong>.</li>
+</ul>
+<p><strong>Partial silk near HV section:</strong> <strong>HR-X</strong> <strong>U</strong> — may be heater-rectifier sub-block; not fully traced.</p>
+<hr>
+<h2>4. PASSIVES &amp; DISCRETES (counts / classes only)</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Qty (approx.)</th>
+<th>Photo notes</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Large blue electrolytic</td>
+<td><strong>2</strong></td>
+<td><strong>100 µF / 400 V</strong> each</td>
+<td>User <strong>C</strong> 2026-11-09</td>
+</tr>
+<tr>
+<td>Large brown electrolytic</td>
+<td><strong>2</strong></td>
+<td><strong>4700 µF / 25 V</strong> each</td>
+<td>LV reservoir <strong>C</strong></td>
+</tr>
+<tr>
+<td>Smaller brown electrolytic</td>
+<td><strong>4</strong></td>
+<td><strong>10 µF / 400 V</strong> each</td>
+<td>HV secondary <strong>C</strong></td>
+</tr>
+<tr>
+<td>Dark blue / small blue</td>
+<td><strong>2</strong></td>
+<td><strong>100 µF / 50 V</strong> + <strong>10 µF / 50 V</strong> (?)</td>
+<td>Near regulator <strong>C</strong></td>
+</tr>
+<tr>
+<td>Blue metal-film resistors</td>
+<td><strong>6</strong></td>
+<td><strong>R1–R6</strong> ink-numbered</td>
+<td>User <strong>C</strong> — see <a href="./pcb-photos/psu/component-side-resistors-numbered.jpg">component-side-resistors-numbered.jpg</a></td>
+</tr>
+<tr>
+<td>Axial diodes</td>
+<td><strong>Several</strong></td>
+<td>Black body + stripe</td>
+<td>Likely 1N400x class <strong>I</strong></td>
+</tr>
+<tr>
+<td>Glass/small diodes</td>
+<td><strong>Few</strong></td>
+<td>Near regulators</td>
+<td><strong>U</strong></td>
+</tr>
+<tr>
+<td>Trimmer pot</td>
+<td><strong>1</strong></td>
+<td><strong>W202</strong> (<strong>2 kΩ</strong>), line <strong>13</strong> — filament <strong>U1</strong> adjust</td>
+<td>User <strong>C</strong></td>
+</tr>
+<tr>
+<td>Bridge rectifiers</td>
+<td><strong>3</strong></td>
+<td><strong>KBP307</strong> (silk <strong>2A</strong> is generic)</td>
+<td>User <strong>C</strong></td>
+</tr>
+<tr>
+<td>MOSFET pass</td>
+<td><strong>2</strong></td>
+<td><strong>2SK2700</strong> (<code>K2700</code> <strong>8S</strong>)</td>
+<td>User <strong>C</strong></td>
+</tr>
+<tr>
+<td>Regulator</td>
+<td><strong>1</strong></td>
+<td><strong>LT1085CT</strong> <code>241228</code></td>
+<td>User <strong>C</strong></td>
+</tr>
+<tr>
+<td>Zeners (D-V)</td>
+<td><strong>2 positions</strong></td>
+<td>Voltage <strong>U</strong></td>
+<td>Set HV; 200 V + short for GG <strong>I</strong></td>
+</tr>
+</tbody></table>
+<p>No reliable R/C designators visible for a full REF map yet.</p>
+<hr>
+<h2>5. SOLDER-SIDE (<a href="./pcb-photos/psu/solder-side.jpg">solder-side.jpg</a>)</h2>
+<p><strong>CONFIRMED visually:</strong></p>
+<ul>
+<li>Very wide traces from bridge / large-cap pads toward heatsinked transistor pads.</li>
+<li>Symmetric left/right HV routing.</li>
+<li>Thick edge trace likely <strong>GND</strong> or main return <strong>I</strong> (right-side pour in as-shot photo → left after hflip alignment).</li>
+<li>Clear keep-out / gap across mid-board consistent with <strong>two independent HV channels</strong> plus a low-voltage island <strong>I</strong>.</li>
+</ul>
+<p><strong>Not resolved from photos alone:</strong> exact star-ground point for filament return vs HV return (forum builders note filament may be <strong>floating</strong> vs chassis while HV center ties to PCB ground <strong>U</strong> — measure before bonding chassis).</p>
+<hr>
+<h2>6. HOOKUP TO GG-PRE AMP (inferred)</h2>
+<p>Matches <a href="gg-pre/index.html">GG-PRE power connector</a> / <a href="gg-pre-amp-schematic.html">schematic §2</a>:</p>
+<table>
+<thead>
+<tr>
+<th>GG-PRE terminal</th>
+<th>GG-PSU source <strong>I</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>+200 V</strong></td>
+<td>Positive regulated HV output</td>
+</tr>
+<tr>
+<td><strong>−200 V</strong></td>
+<td>Negative regulated HV output (other channel, referenced to GND)</td>
+</tr>
+<tr>
+<td><strong>+12</strong></td>
+<td>Filament DC out</td>
+</tr>
+<tr>
+<td><strong>GND</strong></td>
+<td>Common after seller’s ±200 V strapping</td>
+</tr>
+</tbody></table>
+<p>Transformer example from community builds: <strong>2×220 VAC</strong> to HV section, <strong>12.6 VAC</strong> (2×6.3 V series) to filament section <strong>I</strong>.</p>
+<hr>
+<h2>7. PRACTICAL NEXT STEPS</h2>
+<ol>
+<li><strong>Confirm board SKU</strong> — GG-PSU compact vs wide variant on <a href="./pcb-photos/psu/01-overview-wide-variant.jpg">01-overview-wide-variant.jpg</a>.</li>
+<li><strong>Continuity</strong> from each <strong>HV-IN</strong> pin → bridge AC pins; each <strong>VDC-OUT</strong> pin → correct cap polarity.</li>
+<li><strong>Read zeners</strong> at <strong>D-V</strong> (or note if already installed for 200 V).</li>
+<li><strong>Measure all resistors</strong> and capacitors → update <a href="gg-psu-component-id.html">gg-psu-component-id.md</a> (placeholder).</li>
+<li><strong>Draw final nets</strong> in <a href="gg-psu-schematic.html">gg-psu-schematic.md</a> once values are known.</li>
+</ol>
+<hr>
+<p><em>Photos: component-side set in <code>pcb-photos/psu/</code> + solder-side. Seller listings (FYFAudio / similar) used only for topology cross-check, not as proof of your exact BOM.</em></p>
+<p><a href="gg-psu/index.html">← GG-PSU index</a> · <a href="index.html">Project</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

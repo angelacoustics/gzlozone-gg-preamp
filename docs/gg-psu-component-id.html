@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GG-PSU — Component ID</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="gg-psu/index.html">← GG-PSU index</a> · <a href="index.html">Project</a></p>
+<h1>GG-PSU — Component ID</h1>
+<p>Sources: <a href="./pcb-photos/psu/">pcb-photos/psu/</a>; user-confirmed <strong>2026-11-09</strong> (parts + <strong>R1–R6</strong>).</p>
+<p><strong>Confidence:</strong> <strong>C</strong> = user read or part marking · <strong>I</strong> = logical rail assignment (not continuity-proven) · <strong>U</strong> = still unknown.</p>
+<hr>
+<h2>Semiconductors (confirmed)</h2>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Qty</th>
+<th>Part</th>
+<th>Role</th>
+<th>Conf</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Q1, Q2</strong></td>
+<td>2</td>
+<td><strong>2SK2700</strong> (marking <strong>K2700</strong>, suffix <strong>8S</strong> on your parts)</td>
+<td>N-ch HV series pass, heatsinked</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td><strong>U1</strong></td>
+<td>1</td>
+<td><strong>LT1085CT</strong> (date/lot <strong>241228</strong>)</td>
+<td>Adjustable filament / LV regulator</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td><strong>BR1, BR2</strong></td>
+<td>2</td>
+<td><strong>KBP307</strong></td>
+<td>HV AC → DC (3 A, 1000 V class bridge)</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td><strong>BR3</strong></td>
+<td>1</td>
+<td><strong>KBP307</strong></td>
+<td>Filament (or auxiliary) AC → DC</td>
+<td><strong>C</strong> qty / <strong>I</strong> role</td>
+</tr>
+<tr>
+<td><strong>D-V R (D-11)</strong></td>
+<td>1</td>
+<td><strong>wire short</strong></td>
+<td>Right channel — <a href="./pcb-photos/psu/closeups/diode-d11-rr23-r5-area.jpg">closeup</a></td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td><strong>D-V R (other)</strong></td>
+<td>1</td>
+<td><strong>U</strong></td>
+<td>Right channel — second D-V site not in photos yet</td>
+<td><strong>U</strong></td>
+</tr>
+<tr>
+<td><strong>D-V L (one site)</strong></td>
+<td>1</td>
+<td><strong>wire short</strong></td>
+<td>Left channel — jumper beside <strong>R3/R4</strong> stack</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td><strong>CR1</strong></td>
+<td>1</td>
+<td><strong>U</strong> (Onsemi-style logo)</td>
+<td>Left D-V / ref diode beside jumper — not <strong>RR23</strong> print; silk <strong>CR1</strong> <strong>C</strong></td>
+<td><strong>I</strong> zener?</td>
+</tr>
+<tr>
+<td><strong>D1</strong></td>
+<td>1</td>
+<td><strong>RR23</strong> (?)</td>
+<td>Separate from <strong>CR1</strong> footprint — may sit below <strong>R3</strong> on left <strong>I</strong></td>
+<td><strong>I</strong></td>
+</tr>
+<tr>
+<td><strong>D2</strong></td>
+<td>1</td>
+<td><strong>RR23</strong></td>
+<td>DMM <strong>0.577 V</strong> fwd, <strong>OL</strong> rev; marking <strong>RR23</strong> · <strong>35</strong> (batch?) <strong>C</strong></td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td><strong>LED1</strong></td>
+<td>1</td>
+<td>Blue LED</td>
+<td>Power / filament indicator</td>
+<td><strong>C</strong></td>
+</tr>
+</tbody></table>
+<p>Silkscreen <strong>2A</strong> near bridges is a generic label; installed bridges are <strong>KBP307</strong> (<strong>3 A</strong> class) <strong>C</strong>.</p>
+<hr>
+<h2>Capacitors (confirmed values)</h2>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Qty</th>
+<th>Value</th>
+<th>Est. assignment</th>
+<th>Conf</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C1, C2</strong></td>
+<td>2</td>
+<td><strong>100 µF / 400 V</strong></td>
+<td>Large blue — HV bulk, one per channel</td>
+<td><strong>C</strong> / <strong>I</strong> rail</td>
+</tr>
+<tr>
+<td><strong>C3–C6</strong></td>
+<td>4</td>
+<td><strong>10 µF / 400 V</strong></td>
+<td>Smaller brown — HV filter / local (2 per channel <strong>I</strong>)</td>
+<td><strong>C</strong> / <strong>I</strong> rail</td>
+</tr>
+<tr>
+<td><strong>C7, C8</strong></td>
+<td>2</td>
+<td><strong>4700 µF / 25 V</strong></td>
+<td>Large brown — LV rectifier reservoir</td>
+<td><strong>C</strong> / <strong>I</strong> rail</td>
+</tr>
+<tr>
+<td><strong>C9</strong></td>
+<td>1</td>
+<td><strong>100 µF / 50 V</strong></td>
+<td>Dark blue — regulator output or LV filter</td>
+<td><strong>C</strong> / <strong>I</strong> rail</td>
+</tr>
+<tr>
+<td><strong>C10</strong></td>
+<td>1</td>
+<td><strong>10 µF / 50 V</strong></td>
+<td>Small blue — input/adj bypass near <strong>U1</strong></td>
+<td><strong>C</strong></td>
+</tr>
+</tbody></table>
+<h3>Value summary (qty)</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Qty</th>
+<th>Refs (assigned)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>100 µF / 400 V</td>
+<td>2</td>
+<td>C1, C2</td>
+</tr>
+<tr>
+<td>10 µF / 400 V</td>
+<td>4</td>
+<td>C3–C6</td>
+</tr>
+<tr>
+<td>4700 µF / 25 V</td>
+<td>2</td>
+<td>C7, C8</td>
+</tr>
+<tr>
+<td>100 µF / 50 V</td>
+<td>1</td>
+<td>C9</td>
+</tr>
+<tr>
+<td>10 µF / 50 V</td>
+<td>1</td>
+<td>C10</td>
+</tr>
+</tbody></table>
+<p><strong>Note:</strong> Photo mis-read <strong>680 µF</strong> on one blue cap earlier; your board uses <strong>100 µF / 400 V</strong> <strong>C</strong>.</p>
+<hr>
+<h2>Potentiometer</h2>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Qty</th>
+<th>Value</th>
+<th>Notes</th>
+<th>Conf</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>VR1</strong></td>
+<td>1</td>
+<td><strong>2 kΩ</strong> multi-turn (<strong>W202</strong>, top line <strong>13</strong>)</td>
+<td>Filament voltage adjust (<strong>U1</strong> ADJ network)</td>
+<td><strong>C</strong></td>
+</tr>
+</tbody></table>
+<p>No second trimmer reported on your unit — HV fine-trim may be zener-only or a fixed divider <strong>I</strong>.</p>
+<hr>
+<h2>Resistor reference photos (R1–R6)</h2>
+<p>Ink numbers on the component side match the table below.</p>
+<p><img src="./pcb-photos/psu/component-side-resistors-numbered.jpg" alt="GG-PSU resistor numbering R1–R6"></p>
+<p>HV channel pairs <strong>R3–R6</strong>: <a href="./pcb-photos/psu/hv-channel-resistors-3-6-closeup.jpg">hv-channel-resistors-3-6-closeup.jpg</a></p>
+<p><strong>D-11 jumper + RR23 (D2) + R5 area:</strong> <a href="./pcb-photos/psu/closeups/diode-d11-rr23-r5-area.jpg">closeups/diode-d11-rr23-r5-area.jpg</a></p>
+<p><img src="./pcb-photos/psu/closeups/diode-d11-rr23-r5-area.jpg" alt="D-11 short, RR23 axial, R5 region"></p>
+<p><strong>Left channel — D-V jumper, axial diode, R3/R4:</strong> <a href="./pcb-photos/psu/closeups/d-v-left-d1-r3-r4-area.jpg">closeups/d-v-left-d1-r3-r4-area.jpg</a></p>
+<p><img src="./pcb-photos/psu/closeups/d-v-left-d1-r3-r4-area.jpg" alt="Left D-V short, adjacent diode, R3 and R4"></p>
+<p><strong>CR1 body + adjacent jumper (left):</strong> <a href="./pcb-photos/psu/closeups/cr1-d-v-left-jumper.jpg">closeups/cr1-d-v-left-jumper.jpg</a></p>
+<p><img src="./pcb-photos/psu/closeups/cr1-d-v-left-jumper.jpg" alt="CR1 axial and D-V jumper"></p>
+<p>All listed parts: blue <strong>5-band</strong> metal film, <strong>1%</strong> (brown tolerance) unless noted.</p>
+<hr>
+<h2>Resistor BOM (R1–R6) — confirmed values</h2>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Ω</th>
+<th>Region (component side)</th>
+<th>Role <strong>I</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>R1</strong></td>
+<td><strong>100</strong></td>
+<td>Top-left, beside <strong>LED1</strong> and <strong>VR1</strong></td>
+<td>LED current limit</td>
+</tr>
+<tr>
+<td><strong>R2</strong></td>
+<td><strong>10 k</strong></td>
+<td>Left, below <strong>U1</strong> / heatsink, near small caps</td>
+<td><strong>U1</strong> bias / divider leg</td>
+</tr>
+<tr>
+<td><strong>R3</strong></td>
+<td><strong>220</strong></td>
+<td>Center-left, below diode, above <strong>Q1</strong> <strong>N-MOS</strong></td>
+<td>HV channel A (with <strong>R4</strong>)</td>
+</tr>
+<tr>
+<td><strong>R4</strong></td>
+<td><strong>47 k</strong></td>
+<td>Below <strong>R3</strong></td>
+<td>HV channel A (with <strong>R3</strong>)</td>
+</tr>
+<tr>
+<td><strong>R5</strong></td>
+<td><strong>220</strong></td>
+<td>Center-right, below diode, above <strong>Q2</strong> <strong>N-MOS</strong></td>
+<td>HV channel B (mirror of A)</td>
+</tr>
+<tr>
+<td><strong>R6</strong></td>
+<td><strong>47 k</strong></td>
+<td>Below <strong>R5</strong></td>
+<td>HV channel B (mirror of A)</td>
+</tr>
+</tbody></table>
+<p>Bands on <strong>R3/R5</strong> match <strong>220 Ω</strong> (red-red-black-black-brown). <strong>R4/R6</strong> match <strong>47 kΩ</strong> (yellow-violet-black-red-brown) <strong>C</strong>.</p>
+<h3>Value summary (qty)</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Qty</th>
+<th>Refs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>47 kΩ</td>
+<td>2</td>
+<td>R4, R6</td>
+</tr>
+<tr>
+<td>10 kΩ</td>
+<td>1</td>
+<td>R2</td>
+</tr>
+<tr>
+<td>220 Ω</td>
+<td>2</td>
+<td>R3, R5</td>
+</tr>
+<tr>
+<td>100 Ω</td>
+<td>1</td>
+<td>R1</td>
+</tr>
+</tbody></table>
+<p><strong>Note:</strong> Only <strong>six</strong> fixed resistors are populated on this board (per your count). Any other R/C refs in seller docs may be optional or a different PCB revision.</p>
+<hr>
+<h2>Diodes (D1, D2) — how to measure</h2>
+<p><strong>We can measure them on your bench</strong> (not from photos alone). Use a <strong>power-off, discharged</strong> board (bleed the <strong>400 V</strong> caps first).</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. <strong>Read the body</strong></td>
+<td>Black axials above <strong>R3</strong> / <strong>R5</strong>. User read <strong>RR23</strong> on <strong>D2</strong> — re-check for <strong>FR207</strong> / <strong>207</strong> with better light.</td>
+</tr>
+<tr>
+<td>2. <strong>Orientation</strong></td>
+<td>Silver band = <strong>cathode</strong> (K). Matches PCB diode silkscreen on both channels.</td>
+</tr>
+<tr>
+<td>3. <strong>Diode test (DMM)</strong></td>
+<td><strong>Ω/diode</strong> mode: red → anode, black → cathode → expect <strong>~0.55–0.75 V</strong> (silicon / fast-recovery). Reverse → <strong>OL</strong> / no conduction.</td>
+</tr>
+<tr>
+<td>4. <strong>In-circuit caveat</strong></td>
+<td><strong>R4/R6 (47 kΩ)</strong> and the <strong>MOSFET</strong> network can fake readings. If forward voltage looks wrong, lift <strong>one lead</strong> (or measure on a spare part) for a clean test.</td>
+</tr>
+<tr>
+<td>5. <strong>Record</strong></td>
+<td>Note <strong>D1</strong> = left channel, <strong>D2</strong> = right (above <strong>R3/R5</strong>).</td>
+</tr>
+</tbody></table>
+<p><strong>Do not confuse with:</strong></p>
+<ul>
+<li><strong>BR1–BR3 (KBP307)</strong> — four diodes inside each bridge; identify by package, not axial measure.</li>
+<li><strong>D-V1, D-V2</strong> — <strong>5 W zener</strong> positions (HV setpoint). Different part, different test (below).</li>
+</ul>
+<h3>Identification status</h3>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>DMM (diode mode)</th>
+<th>Body marking</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>D2</strong></td>
+<td><strong>0.577 V</strong> forward, <strong>OL</strong> reversed <strong>C</strong></td>
+<td><strong>RR23</strong> <strong>C</strong> (user read)</td>
+</tr>
+<tr>
+<td><strong>D1</strong></td>
+<td><em>not reported</em></td>
+<td>Assumed <strong>RR23</strong> <strong>I</strong></td>
+</tr>
+</tbody></table>
+<p><strong>0.577 V</strong> forward fits a <strong>standard silicon rectifier</strong> at DMM current (not Schottky, not zener).</p>
+<h3>What “RR23” likely is</h3>
+<p>There is <strong>no common catalog part literally named RR23</strong> in this role (that string is often a <strong>motorcycle reg/rec</strong> SKU, unrelated here). On Chinese PSU kits, similar black <strong>DO-15</strong> diodes are usually in the <strong>FR207</strong> family:</p>
+<table>
+<thead>
+<tr>
+<th>Likely equivalent</th>
+<th>Spec</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>FR207</strong> / <strong>ER207</strong> / <strong>HER207</strong></td>
+<td><strong>2 A</strong>, <strong>1000 V</strong>, fast recovery</td>
+<td>Matches HV <strong>2SK2700</strong> channel; photo once looked like “FR207”</td>
+</tr>
+<tr>
+<td><strong>2A07</strong> (e.g. <strong>2A07-T</strong>)</td>
+<td><strong>2 A</strong>, <strong>1000 V</strong></td>
+<td>Same class</td>
+</tr>
+<tr>
+<td><strong>1N5623</strong></td>
+<td><strong>2 A</strong>, <strong>1000 V</strong></td>
+<td>Older JEDEC name, similar job</td>
+</tr>
+</tbody></table>
+<p><strong>Check the print again:</strong> on many parts <strong>F</strong> and <strong>R</strong> look alike, and <strong>FR207</strong> can be mis-read as <strong>RR23</strong> or <strong>RR207</strong> (missing digits). If you can see <strong>FR207</strong> or <strong>207</strong>, treat marking as that.</p>
+<p><strong>Replacement:</strong> use <strong>FR207</strong> (or <strong>1N5623</strong> / <strong>2A07</strong>) <strong>2 A · 1000 V</strong> — <strong>not</strong> <strong>FR203</strong> (only <strong>200 V</strong>), which would be underrated here.</p>
+<hr>
+<h2>Zeners (D-V) — separate from D1/D2 axial rectifiers</h2>
+<p>HV setpoint (seller: <strong>Vout ≈ Vz1 + Vz2</strong>). For <strong>200 V</strong>, typical build: <strong>one</strong> zener in one footprint, <strong>wire short</strong> in the other.</p>
+<h3>From your close-ups <strong>C</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Location</th>
+<th>Installed</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Right — D-11</strong></td>
+<td><strong>Wire jumper</strong></td>
+<td><a href="./pcb-photos/psu/closeups/diode-d11-rr23-r5-area.jpg">diode-d11-rr23-r5-area.jpg</a>. <strong>RR23</strong> below = <strong>D2</strong> rectifier, not the zener site.</td>
+</tr>
+<tr>
+<td><strong>Left — D-V pair</strong></td>
+<td><strong>Jumper</strong> + <strong>black axial</strong> side-by-side</td>
+<td><a href="./pcb-photos/psu/closeups/d-v-left-d1-r3-r4-area.jpg">d-v-left-d1-r3-r4-area.jpg</a>. <strong>R3/R4</strong> below.</td>
+</tr>
+</tbody></table>
+<p>Seller wiring <strong>I</strong>: <strong>Vout ≈ Vz1 + Vz2</strong> with <strong>one</strong> site strapped and <strong>one</strong> holding the zener (<strong>200 V</strong> class for GG-PRE). This board shows <strong>at least two strapped sites</strong> (right <strong>D-11</strong> + left jumper). The <strong>200 V</strong> (or stacked) zener is likely the <strong>black axial beside the left jumper</strong> and/or a <strong>second D-V site on the right</strong> not visible in the first right-channel photo.</p>
+<p>Close-up of <strong>CR1</strong> <a href="./pcb-photos/psu/closeups/cr1-d-v-left-jumper.jpg">cr1-d-v-left-jumper.jpg</a>: <strong>no RR23</strong> text; <strong>Onsemi / Motorola-style circle logo</strong> on the body; faint characters to the right of the logo not fully legible in the photo.</p>
+<p><strong>Likely role <strong>I</strong>:</strong> <strong>5 W–class voltage reference</strong> in the left channel D-V pair (mate to the <strong>wire short</strong>), not the same marking style as <strong>D2 (RR23)</strong>.</p>
+<p><strong>Common kit alternates for ~200 V here:</strong> <strong>2CW200</strong>, <strong>1N5388B</strong> (200 V, 5 W), or stacked lower-voltage zeners per seller <strong>D-V</strong> silk. Confirm by:</p>
+<ol>
+<li>Full part number under stronger light / loupe.  </li>
+<li><strong>DMM diode test</strong> forward ~<strong>0.6 V</strong> (same as any Si diode — does not prove voltage).  </li>
+<li>If you have a spare from the kit bag, read its print.</li>
+</ol>
+<p><strong>Right channel:</strong> still locate the non-jumpered D-V part (mirror of <strong>CR1</strong> / <strong>D-11</strong> pair).</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Visual</strong></td>
+<td>Glass or black 5 W zener with voltage printed (e.g. <strong>2CW200</strong>, <strong>200V</strong>)</td>
+</tr>
+<tr>
+<td><strong>DMM</strong></td>
+<td>Forward ~0.6 V only; breakdown needs bench test</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>BOM freeze (user input complete)</h2>
+<p>No further photos or markings available. Documented <strong>unknowns</strong> are closed with <strong>inferred rebuild guidance</strong> below (not continuity-verified on your board).</p>
+<h3>Rebuild shopping list (<strong>C</strong> unless noted)</h3>
+<table>
+<thead>
+<tr>
+<th>Qty</th>
+<th>Part</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td><strong>2SK2700</strong> (<code>K2700</code>)</td>
+<td>HV pass</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>RR23</strong> marking axial <strong>I</strong> → spare <strong>FR207</strong> class <strong>2 A / 1000 V</strong></td>
+<td><strong>D1</strong> assumed = <strong>D2</strong> <strong>I</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>LT1085CT</strong></td>
+<td>Filament reg</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>KBP307</strong></td>
+<td>Bridges</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>100 µF / 400 V</strong></td>
+<td>Blue HV bulk</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>10 µF / 400 V</strong></td>
+<td>Brown</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>4700 µF / 25 V</strong></td>
+<td>Brown LV</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>100 µF / 50 V</strong></td>
+<td>Dark blue</td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>10 µF / 50 V</strong></td>
+<td>Small blue <strong>C</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>2 kΩ</strong> trim <strong>W202</strong></td>
+<td>Filament</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Blue <strong>LED</strong> + <strong>R1</strong> <strong>100 Ω</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>R2</strong> <strong>10 kΩ</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>2× <strong>220 Ω</strong>, 2× <strong>47 kΩ</strong></td>
+<td><strong>R3–R6</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>5 W zener stack</strong> per HV channel <strong>I</strong></td>
+<td>See § D-V below</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Wire jumpers</td>
+<td><strong>D-11</strong> + left D-V short <strong>C</strong></td>
+</tr>
+</tbody></table>
+<h3>D-V / <strong>CR1</strong> — documented limit</h3>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Status</th>
+<th>Rebuild for <strong>±200 V</strong> (GG-PRE) <strong>I</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CR1</strong> (left)</td>
+<td>Installed; logo only <strong>C</strong> photo</td>
+<td><strong>200 V</strong> in <strong>CR1</strong> footprint (e.g. <strong>2CW200</strong>, <strong>1N5388B</strong>, or seller <strong>200 V</strong> 5 W part)</td>
+</tr>
+<tr>
+<td><strong>D-11</strong> (right)</td>
+<td><strong>Wire short</strong> <strong>C</strong></td>
+<td>Keep short</td>
+</tr>
+<tr>
+<td><strong>Left D-V mate</strong></td>
+<td><strong>Wire short</strong> <strong>C</strong></td>
+<td>Keep short</td>
+</tr>
+<tr>
+<td><strong>Right channel ref</strong></td>
+<td>Not photographed <strong>U</strong></td>
+<td>Mirror left: <strong>one</strong> <strong>200 V</strong> zener + <strong>one</strong> short per seller <strong>Vz1+Vz2</strong> rule</td>
+</tr>
+</tbody></table>
+<p>Seller rule <strong>I</strong>: <strong>Vout_HV ≈ Vz(D-V1) + Vz(D-V2)</strong>. Your build shows <strong>shorts in both “second” sites</strong> we photographed; active zener(s) are at <strong>CR1</strong> (left) and the <strong>right-channel twin</strong> of <strong>CR1</strong> (assume symmetric).</p>
+<p><strong>If you ever replace CR1 without a readable part number:</strong> use <strong>200 V · 5 W</strong> axial zener (or one <strong>200 V</strong> + short second pad) and adjust only if measured HV at <strong>VDC-OUT</strong> differs from <strong>±200 V</strong> under load.</p>
+<h3>Optional (nice for docs, not required to build)</h3>
+<ul>
+<li>Per-cap <strong>C1–C9</strong> pad map  </li>
+<li><strong>D1</strong> duplicate DMM read  </li>
+<li>Connector pin order buzz-out</li>
+</ul>
+<hr>
+<p><a href="gg-psu/index.html">← GG-PSU index</a> · <a href="index.html">Project</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

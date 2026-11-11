@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GG-PSU — documentation index</title>
+  <link rel="stylesheet" href="../assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="../assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="../index.html">GG kit build docs</a>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../BUILD.html">Build guide</a>
+      <a href="../marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="../index.html">← Project home</a></p>
+<h1>GG-PSU — documentation index</h1>
+<p><strong>GZLOZONE / Zero Zone GG-PSU</strong> — dual <strong>high-voltage regulated</strong> channels + <strong>LT1085</strong> filament supply. Feeds <a href="../gg-pre/index.html">GG-PRE AMP</a>: <strong>±200 V</strong> and <strong>~12 V</strong> heaters (external transformer required).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Marking</strong></td>
+<td><code>ZERO ZONE</code> · <code>GG-PSU</code></td>
+</tr>
+<tr>
+<td><strong>PCB (seller)</strong></td>
+<td>130 × 70 mm</td>
+</tr>
+<tr>
+<td><strong>Outputs</strong></td>
+<td>2× regulated HV (strapped <strong>±200 V</strong>), adjustable LV <strong>~3.5–12.6 V</strong></td>
+</tr>
+<tr>
+<td><strong>BOM status</strong></td>
+<td><strong>Frozen</strong> — <a href="../gg-psu-component-id.html">component ID</a>; <strong>CR1</strong> zener P/N → use <strong>200 V</strong> 5 W <strong>I</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Safety:</strong> Mains-derived <strong>400 V</strong> class capacitors. Bleed before service. Lethal voltages.</p>
+<p><strong>Building the kit:</strong> <a href="../BUILD.html">BUILD.md</a> (trafo, PSU bring-up, ±200 V strap).</p>
+<hr>
+<h2>Read in this order</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Document</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><a href="../gg-psu-schematic.html">gg-psu-schematic.md</a></td>
+<td>Topology, ±200 V strapping, connectors, netlist</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="../gg-psu-schematic.svg">gg-psu-schematic.svg</a></td>
+<td>Block diagram (confirmed values + D-V notes)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="../gg-psu-component-id.html">gg-psu-component-id.md</a></td>
+<td>BOM + <strong>BOM freeze</strong> shopping list</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="../gg-psu-pcb-reverse-engineering.html">gg-psu-pcb-reverse-engineering.md</a></td>
+<td>Photo PCB pass, D-V / <strong>CR1</strong> notes</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="transformer.html">transformer.md</a></td>
+<td><strong>R20-TS4803A</strong> R-core: <strong>230 V</strong> = <strong>RED–GRY</strong> tie <strong>C</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Key parts (summary)</h2>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Parts</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HV pass</td>
+<td>2× <strong>2SK2700</strong>, 2× <strong>KBP307</strong>, 100 µF/400 V bulk</td>
+</tr>
+<tr>
+<td>HV diode (D1/D2)</td>
+<td><strong>RR23</strong> marking → order <strong>FR207</strong> class 2 A/1 kV <strong>I</strong></td>
+</tr>
+<tr>
+<td>Filament</td>
+<td><strong>LT1085CT</strong>, 4700 µF/25 V×2, <strong>W202</strong> trim, LED + <strong>100 Ω</strong></td>
+</tr>
+<tr>
+<td>Resistors</td>
+<td><strong>R1–R6</strong> only (see numbered photo)</td>
+</tr>
+<tr>
+<td>D-V reference</td>
+<td><strong>CR1</strong> + mirrored right channel; <strong>D-11</strong> / left mates <strong>jumped</strong> <strong>C</strong></td>
+</tr>
+</tbody></table>
+<p>Full table: <a href="../gg-psu-component-id.html">gg-psu-component-id.md</a>.</p>
+<hr>
+<h2>Photos</h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Overview</td>
+<td><a href="../pcb-photos/psu/06-overview-gg-psu.jpg">../pcb-photos/psu/06-overview-gg-psu.jpg</a></td>
+</tr>
+<tr>
+<td>Solder side</td>
+<td><a href="../pcb-photos/psu/solder-side.jpg">../pcb-photos/psu/solder-side.jpg</a></td>
+</tr>
+<tr>
+<td><strong>R1–R6 numbered</strong></td>
+<td><a href="../pcb-photos/psu/component-side-resistors-numbered.jpg">../pcb-photos/psu/component-side-resistors-numbered.jpg</a></td>
+</tr>
+<tr>
+<td>D-V / diodes close-ups</td>
+<td><a href="../pcb-photos/psu/closeups/">../pcb-photos/psu/closeups/</a></td>
+</tr>
+<tr>
+<td>All PSU photos</td>
+<td><a href="../pcb-photos/psu/">../pcb-photos/psu/</a></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Feed to GG-PRE (4-pin)</h2>
+<table>
+<thead>
+<tr>
+<th>GG-PRE terminal</th>
+<th>GG-PSU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>+200V</code></td>
+<td>HV reg positive rail</td>
+</tr>
+<tr>
+<td><code>−200V</code></td>
+<td>HV reg negative rail</td>
+</tr>
+<tr>
+<td><code>+12</code></td>
+<td>Filament regulator output (set ~12.6 V for series 12AU7 heaters <strong>I</strong>)</td>
+</tr>
+<tr>
+<td><code>GND</code></td>
+<td>Common after ± strap</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Transformer</h2>
+<p>Documented kit part: <strong><a href="transformer.html">R20-TS4803A</a></strong> (ZEROZONE R-core).</p>
+<table>
+<thead>
+<tr>
+<th>Mains</th>
+<th>Primary hookup <strong>C</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>~230 V</strong></td>
+<td><strong>RED</strong> tied to <strong>GRY</strong>; <strong>BLK</strong> and <strong>ORG</strong> to L/N</td>
+</tr>
+<tr>
+<td><strong>~115 V</strong></td>
+<td><strong>BLK–GRY</strong> and <strong>RED–ORG</strong> in parallel</td>
+</tr>
+</tbody></table>
+<p><strong>YEL</strong> / <strong>GRN</strong> → <strong>HV-IN</strong>; <strong>BLU (14 V)</strong> → filament input on PSU <strong>I</strong>.</p>
+<p>Photo: <a href="../pcb-photos/transformer/zerozone-r20-ts4803a-label.jpg">../pcb-photos/transformer/zerozone-r20-ts4803a-label.jpg</a></p>
+<hr>
+<h2>Related</h2>
+<ul>
+<li><a href="../marantz-7-vs-gg-reference.html#5-star-grounding-deep-dive">Marantz 7 vs GG reference §5 — star ground</a> (PSU strap, filament return <strong>U</strong>)</li>
+<li><a href="../gg-pre/index.html">GG-PRE AMP documentation</a></li>
+<li><a href="../index.html">Project README</a></li>
+</ul>
+<p><a href="../index.html">← Project home</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

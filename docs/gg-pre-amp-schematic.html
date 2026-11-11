@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GZLOZONE / Zero Zone GG-PRE AMP — Reverse-Engineered Schematic</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="gg-pre/index.html">← GG-PRE index</a> · <a href="index.html">Project</a></p>
+<h1>GZLOZONE / Zero Zone GG-PRE AMP — Reverse-Engineered Schematic</h1>
+<p>Stereo tube line preamp PCB, three× <strong>12AU7</strong>, bipolar HV <strong>±200 V</strong>, heaters <strong>+12 V</strong>. Reverse-engineered from board photos for the Marantz 7–related project (this board is a <strong>grounded-grid / “GG” reference</strong>, not a Marantz 7 circuit).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Board marking</strong></td>
+<td><code>GZLOZONE®</code> · <code>ZERO ZONE</code> · <code>GG-PRE AMP</code></td>
+</tr>
+<tr>
+<td><strong>PCB size (seller)</strong></td>
+<td>132 × 132 mm, 1.5 mm, ~50 µm Cu</td>
+</tr>
+<tr>
+<td><strong>Tubes</strong></td>
+<td>3× 12AU7 (ECC82), B9A sockets</td>
+</tr>
+<tr>
+<td><strong>Primary sources</strong></td>
+<td>Component-side + solder-side photos; seller listings (FYFAudio / AliExpress item 32817540189)</td>
+</tr>
+<tr>
+<td><strong>Topology lineage</strong></td>
+<td>Chinese clone of Bruce Rozenblit / Transcendent Sound “Grounded Grid” line stage (CF → GG → CF, ±HV). Original published schematic is in <em>Audio Reality</em> (not reproduced here).</td>
+</tr>
+</tbody></table>
+<p><strong>Confidence legend:</strong> <strong>C</strong> = confirmed from silkscreen / clear photo · <strong>I</strong> = inferred from layout + known GG topology · <strong>U</strong> = unknown / conflicting photo reads — measure before building.</p>
+<hr>
+<h2>1. Topology summary</h2>
+<p>Each channel is a <strong>cathode-follower input buffer</strong> driving a <strong>grounded-grid (common-cathode) gain stage</strong>, then a <strong>cathode-follower output buffer</strong>, AC-coupled to the RCA/terminal output.</p>
+<pre><code>IN-x ──► [input CF] ──cathode-couple──► [GG gain] ──► [output CF] ──► Cout ──► OUT-x
+              ▲                              │
+              │         grid ≈ AC ground      │
+              └──────── feedback (likely) ────┘
+</code></pre>
+<ul>
+<li><strong>Non-inverting</strong> overall (CF + GG both preserve phase).</li>
+<li>Seller / clone literature: ~<strong>12 dB</strong> gain, ~<strong>300 Ω</strong> Zout, bandwidth into the hundreds of kHz (Transcendent / listing claims).</li>
+<li><strong>±200 V</strong> gives headroom for CF cathode loads to the negative rail without huge resistors to ground.</li>
+<li>Board has <strong>no on-board rectifier</strong> — expects <a href="gg-psu/index.html">GG-PSU</a> (AC→±200 V DC + 12 V heaters).</li>
+</ul>
+<h3>Tube role map (inferred)</h3>
+<table>
+<thead>
+<tr>
+<th>Tube</th>
+<th>Position (component side)</th>
+<th>Role (<strong>I</strong>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>V1</strong></td>
+<td>Top-left, near <code>IN-R</code></td>
+<td>Right channel: input CF + GG gain (both triode halves)</td>
+</tr>
+<tr>
+<td><strong>V2</strong></td>
+<td>Top-right, near <code>IN-L</code> / power</td>
+<td>Left channel: input CF + GG gain</td>
+</tr>
+<tr>
+<td><strong>V3</strong></td>
+<td>Center, above yellow film caps</td>
+<td>Dual output CF (one half per channel)</td>
+</tr>
+</tbody></table>
+<p>Alternative (less likely from layout): V3 holds both GG stages. <strong>Not favored</strong> — yellow output coupling caps sit at the V3 / bottom area.</p>
+<hr>
+<h2>2. Connectors</h2>
+<h3>Power — 4-pin screw terminal (right edge) <strong>C</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Pin (top → bottom)</th>
+<th>Net</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>−200 V</strong></td>
+<td>Negative HV rail</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>+12</strong></td>
+<td>Heater supply (~12–12.6 V DC class)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>+200 V</strong></td>
+<td>Positive HV / B+</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>GND</strong></td>
+<td>Common ground</td>
+</tr>
+</tbody></table>
+<h3>Audio IN — 3-pin (top center) <strong>C</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Pin (left → right)</th>
+<th>Net</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>IN-R</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>GND</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>IN-L</strong></td>
+</tr>
+</tbody></table>
+<h3>Audio OUT — 3-pin (bottom center) <strong>C</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Pin (left → right)</th>
+<th>Net</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>OUT-R</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>GND</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>OUT-L</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 12AU7 pinout (standard)</h2>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Anode / plate section 1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Grid section 1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Cathode section 1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Heater</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Heater</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Anode / plate section 2</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Grid section 2</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Cathode section 2</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Heater center tap</td>
+</tr>
+</tbody></table>
+<p>Socket key / gap on V1 and V2: approximately <strong>6 o’clock</strong> (toward board bottom) on the component side <strong>C</strong>. V3 gap clock is <strong>U</strong> (reads conflict 6 vs 12 o’clock).</p>
+<h3>Heater wiring <strong>U — measure</strong></h3>
+<ul>
+<li>Silkscreen <strong><code>+12</code></strong> implies intended <strong>12.6 V series</strong> heaters: one end of 4–5 string to <code>+12</code>, other to <code>GND</code>, pin 9 unused.</li>
+<li>Solder-side photos also show <strong>thick bridging in the pin 4/5 region</strong> on each socket, which can look like a <strong>6.3 V parallel</strong> hookup (4+5 tied, return on 9).</li>
+<li><strong>Do not assume either.</strong> Continuity-check pins 4, 5, 9 to <code>+12</code> and <code>GND</code> on a physical board before applying power.</li>
+</ul>
+<hr>
+<h2>4. Per-channel schematic (netlist style)</h2>
+<p>Reference designators below are <strong>assigned for this document</strong> (board has no readable R/C numbers). Values marked <strong>U</strong> must be verified with a meter.</p>
+<h3>Right channel (mirror for left: V1→V2, CoutR→CoutL, IN-R→IN-L, OUT-R→OUT-L)</h3>
+<pre><code>                         +200V
+                           │
+                        Ra_gg   (plate load of GG section)     U value
+                           │
+                           ├──► (optional couple / direct) ──► G of V3 out-CF
+                           │
+                      [V1 GG]  plate = A_gg
+                      grid ──► AC ground (hard GND or via bypass)   I
+                      cathode ─┬── tied / coupled to CF cathode    I
+                               │
+                         [V1 CF]  plate → +200V (direct or small R) I
+                          grid ◄── Rin ◄── IN-R                    I / U Rin
+                      cathode ─┴── Rk_cf ──► −200V                 I / U Rk
+                           │
+                      feedback network (likely from out-CF / Cout)  I / U
+
+      +200V
+        │
+     Ra_cf_out (or plate direct to +200V)                          U
+        │
+   [V3 out-CF] plate
+        grid ◄── from GG plate (DC or AC couple)                   I
+     cathode ──┬──► CoutR (1.0 µF) ──► OUT-R                       C path
+               └── Rk_out ──► −200V or GND                         I / U
+</code></pre>
+<h3>Shared / power</h3>
+<pre><code>+200V ── Cdec+ ── GND     electrolytic; silkscreen 22µF-250V     C silk / U rail assign
+−200V ── Cdec− ── GND     mate electrolytic                        I / U assign
++12   ── heaters V1,V2,V3 ── (GND or series return)                U
+GND   ── IN/OUT center pins, ground pour                           C
+</code></pre>
+<h3>Functional block diagram (stereo)</h3>
+<pre><code>                    +200V / −200V / +12 / GND
+                              │
+         ┌────────────────────┼────────────────────┐
+         │                    │                    │
+      IN-R                 heaters              IN-L
+         │                    │                    │
+      ┌──┴──┐              ┌──┴──┐              ┌──┴──┐
+      │ V1  │              │ V3  │              │ V2  │
+      │CF+GG│────► half ──►│2×CF │◄── half ─────│CF+GG│
+      └─────┘              └──┬──┘              └─────┘
+                              │
+                    CoutR / CoutL (1.0 µF)
+                              │
+                         OUT-R / OUT-L
+</code></pre>
+<hr>
+<h2>5. BOM table (photo-derived)</h2>
+<p>Assigned refs are for rebuild documentation only. Detailed band reads: <a href="gg-pre-component-id.html">gg-pre-component-id.md</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Qty</th>
+<th>Value</th>
+<th>Notes</th>
+<th>Conf</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V1–V3</td>
+<td>3</td>
+<td>12AU7 / ECC82</td>
+<td>Ceramic B9A sockets on PCB</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>CoutR, CoutL</td>
+<td>2</td>
+<td><strong>1.0 µF ±5%</strong> film, Un <strong>250 V~</strong></td>
+<td>ARCOTRONICS MKP C.4G; OUT coupling</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>CdecL, CdecR</td>
+<td>2</td>
+<td>Installed <strong>10 µF / 450 V</strong></td>
+<td>EPCOS B43588-S5106-T…; silk <code>22UF-250V</code></td>
+<td><strong>C</strong> body / <strong>C</strong> silk</td>
+</tr>
+<tr>
+<td>—</td>
+<td>1</td>
+<td>4-pin screw terminal</td>
+<td>Power</td>
+<td><strong>C</strong></td>
+</tr>
+<tr>
+<td>—</td>
+<td>2</td>
+<td>3-pin screw terminal</td>
+<td>IN, OUT</td>
+<td><strong>C</strong></td>
+</tr>
+</tbody></table>
+<h3>Resistors — R1–R14 (user confirmed, 2026-11-09)</h3>
+<p>Full table with estimated wattage: <a href="gg-pre-component-id.html">gg-pre-component-id.md</a>. Resistor locations: <a href="./pcb-photos/component-side-resistors-numbered.jpg">numbered board photo</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Value</th>
+<th>Est. power</th>
+<th>Region</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>R1, R3</td>
+<td>50 kΩ</td>
+<td>~2 W</td>
+<td>Top, V1 / V2</td>
+</tr>
+<tr>
+<td>R2, R4</td>
+<td>10 kΩ</td>
+<td>~1 W</td>
+<td>Top, input / power</td>
+</tr>
+<tr>
+<td>R5, R6</td>
+<td>30 kΩ</td>
+<td>~2 W</td>
+<td>Mid horizontal (V3)</td>
+</tr>
+<tr>
+<td>R7, R8</td>
+<td>10 kΩ</td>
+<td>~1 W</td>
+<td>Mid</td>
+</tr>
+<tr>
+<td>R9, R10</td>
+<td>3 kΩ</td>
+<td>~1 W</td>
+<td>Mid</td>
+</tr>
+<tr>
+<td>R11, R12</td>
+<td>20 kΩ</td>
+<td>~1 W</td>
+<td>Above Cout L/R</td>
+</tr>
+<tr>
+<td>R13, R14</td>
+<td>100 kΩ</td>
+<td>~1 W</td>
+<td>OUT L/R vertical string</td>
+</tr>
+</tbody></table>
+<p>Numbering matches ink on the component-side overview photo.</p>
+<hr>
+<h2>6. Power, heaters, audio I/O (rebuild checklist)</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Spec</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B+</td>
+<td><strong>+200 V DC</strong>, low current (seller PSU class ~50 mA HV)</td>
+</tr>
+<tr>
+<td>B−</td>
+<td><strong>−200 V DC</strong>, similar current class</td>
+</tr>
+<tr>
+<td>Heaters</td>
+<td><strong>+12 V DC</strong> (listing / silk); confirm series vs parallel on PCB</td>
+</tr>
+<tr>
+<td>Ground</td>
+<td>Single GND star/pour — bond IN/OUT/power GND; chassis star / 10 Ω / strap → <a href="marantz-7-vs-gg-reference.html#5-star-grounding-deep-dive">marantz-7-vs-gg-reference.md §5</a></td>
+</tr>
+<tr>
+<td>Input Z</td>
+<td>Clone literature ~50 kΩ class (Transcendent); <strong>U</strong> on this PCB</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>AC-coupled via 1.0 µF; Zout ~200–300 Ω (literature)</td>
+</tr>
+<tr>
+<td>Gain</td>
+<td>~12 dB / ~×4–×6 (listings)</td>
+</tr>
+</tbody></table>
+<p><strong>Safety:</strong> ±200 V is lethal. Bleed electrolytics before probing. Observe polarity on Cdec (± rails).</p>
+<hr>
+<h2>7. Assumptions and uncertainties</h2>
+<ol>
+<li><strong>Topology</strong> is Rozenblit-style CF→GG→CF with V1/V2 as channel front-ends and V3 as dual output CF — strong layout fit, not continuity-proven.</li>
+<li><strong>Exact pin map</strong> (which V1 half is CF vs GG; which V3 pins feed CoutR vs CoutL) needs a buzz-out.</li>
+<li><strong>Most resistor values</strong> are not trustworthy from these photos alone.</li>
+<li><strong>Heater series vs parallel</strong> unresolved (<code>+12</code> silk vs apparent 4–5 bridging).</li>
+<li><strong>Which electrolytic is on +200 vs −200</strong> unresolved (both are HV rail filters <strong>I</strong>).</li>
+<li><strong>Installed electrolytics</strong> may be 10 µF/450 V on a 22 µF/250 V silk — rebuild either to silk or to measured parts.</li>
+<li><strong>Feedback network</strong> almost certainly present (gain figures imply local/global NFB) but resistor identification is <strong>U</strong>.</li>
+<li>AliExpress page returned no usable BOM/schematic text in this environment; FYFAudio confirms ±200 V + 12 V and 3×12AU7 only.</li>
+<li>This is <strong>not</strong> a Marantz 7 schematic — use it as a GG reference board in that project context.</li>
+</ol>
+<h3>Recommended verification on a physical board</h3>
+<ol>
+<li>Continuity: heater pins 4/5/9 ↔ <code>+12</code> / <code>GND</code>.</li>
+<li>Continuity: each electrolytic <code>+</code> pad ↔ <code>+200V</code> or <code>−200V</code>.</li>
+<li>Ohmmeter every resistor; redraw BOM.</li>
+<li>Trace IN → grid, GG plate → V3 grid, V3 cathode → Cout → OUT.</li>
+</ol>
+<hr>
+<h2>8. Companion visual</h2>
+<p>SVG schematic (one channel + shared power/heaters + stereo notes):</p>
+<ul>
+<li><a href="./gg-pre-amp-schematic.svg"><code>gg-pre-amp-schematic.svg</code></a></li>
+</ul>
+<hr>
+<h2>9. Source photos</h2>
+<ul>
+<li><a href="./pcb-photos/component-side.jpg">pcb-photos/component-side.jpg</a></li>
+<li><a href="./pcb-photos/solder-side.jpg">pcb-photos/solder-side.jpg</a></li>
+</ul>
+<p>Detailed visual pass: <a href="gg-pre-pcb-reverse-engineering.html">gg-pre-pcb-reverse-engineering.md</a></p>
+<hr>
+<p><a href="gg-pre/index.html">← GG-PRE index</a> · <a href="index.html">Project</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

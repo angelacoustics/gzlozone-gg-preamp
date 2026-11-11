@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marantz Model 7 vs Bruce Rozenblit GG — reference map</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<p><a href="index.html">← Project</a> · <a href="gg-pre/index.html">GG-PRE</a> · <a href="gg-psu/index.html">GG-PSU</a></p>
+<h1>Marantz Model 7 vs Bruce Rozenblit GG — reference map</h1>
+<p>This note ties together three topics for this project folder:</p>
+<ol>
+<li><strong>Kit lineage</strong> — your <strong>Zero Zone GG-PRE + GG-PSU</strong> vs the <a href="https://kikitronic.blogspot.com/2009/11/grounded-grid-pre-amplifier.html">Kikitronic / Analogmetric GG DIY kit</a> (same Rozenblit circuit family).</li>
+<li><strong>Technical role map</strong> — what each design does electrically, and where a GG board can (and cannot) sit relative to a <strong>Marantz Model 7</strong> signal path.</li>
+<li><strong>Star grounding</strong> — what clone sellers and builders mean, how it applies to split GG boards, and how that differs from classic Marantz practice.</li>
+</ol>
+<p><strong>Confidence:</strong> Marantz figures below are from factory manuals/spec sheets (7 / 7T / 7C). GG numbers marked <strong>(lit)</strong> come from Transcendent / clone listings; <strong>(measured)</strong> means you must meter your board.</p>
+<hr>
+<h2>1. Same family as the Kikitronic blog kit?</h2>
+<p><strong>Yes — same topology and intent</strong>, different vendor PCB and parts.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Kikitronic / Analogmetric kit (blog)</th>
+<th>Your Zero Zone boards</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Designer lineage</td>
+<td>Bruce Rozenblit, Transcendent Sound “Grounded Grid”</td>
+<td>Same <strong>(I)</strong> — see <a href="gg-pre-amp-schematic.html">gg-pre-amp-schematic.md</a></td>
+</tr>
+<tr>
+<td>Tubes</td>
+<td>3× 12AU7 (often Shuguang)</td>
+<td>3× 12AU7 <strong>C</strong></td>
+</tr>
+<tr>
+<td>HV supply</td>
+<td>±200 V from split PSU PCB</td>
+<td>±200 V from <strong>GG-PSU</strong> <strong>C</strong></td>
+</tr>
+<tr>
+<td>Heaters</td>
+<td>12.6 V class, LT1085 on PSU</td>
+<td>+12 V silk on <strong>GG-PRE</strong>; wiring <strong>U</strong></td>
+</tr>
+<tr>
+<td>Topology</td>
+<td>Input CF → grounded-grid gain → output CF</td>
+<td>Same <strong>I</strong></td>
+</tr>
+<tr>
+<td>Gain (example)</td>
+<td>~14 dB with 100 kΩ / 20 kΩ ratio (blog)</td>
+<td>~12 dB <strong>(lit)</strong>; R11–R14 include 20 kΩ / 100 kΩ pairs <strong>C</strong></td>
+</tr>
+<tr>
+<td>Rectification</td>
+<td>On PSU PCB</td>
+<td>On <strong>GG-PSU</strong> only; <strong>GG-PRE</strong> has no on-board HV rectifier <strong>C</strong></td>
+</tr>
+</tbody></table>
+<p>Your folder README states clearly: these boards are <strong>reference material</strong>, <strong>not</strong> a Marantz 7 schematic.</p>
+<hr>
+<h2>2. Marantz 7 — what the original actually is</h2>
+<p>The <strong>Marantz Model 7</strong> is a <strong>full stereo control preamplifier</strong> (1958–1966 era), not a single line stage.</p>
+<h3>Signal path (simplified, from 7C service manual)</h3>
+<pre><code>Low-level inputs (mic / phono / tape head)
+        │
+        ▼
+   Preamp V2 + V3  (~40–42 dB + equalization in feedback)
+        │
+        ├──► Recording outputs (lower gain taps)
+        │
+High-level inputs ──► selector ──► Mode / filter routing
+        │
+        ▼
+   Tone amplifier V5  (~22.5 dB, bass/treble in feedback)
+        │
+        ▼
+   Optional LF / HF filters
+        │
+        ▼
+   Cathode follower V6  (low Z drive, level control)
+        │
+        ▼
+   Main outputs (~10 V rms max, ~600 Ω class)
+</code></pre>
+<p><strong>Tubes:</strong> 6× <strong>12AX7 (ECC83)</strong> — higher μ, different stage jobs than the GG’s 12AU7 line stage.</p>
+<h3>Published specs (representative)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Marantz Model 7</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>High-level input → main output gain</td>
+<td><strong>~21.5 dB</strong> (balance centered)</td>
+<td>Manual: “high level” path</td>
+</tr>
+<tr>
+<td>Phono → main output</td>
+<td><strong>~63–64.5 dB</strong></td>
+<td>Includes low-level preamp + rest of chain</td>
+</tr>
+<tr>
+<td>Line input Z</td>
+<td><strong>~100 kΩ</strong></td>
+<td>User-manual class</td>
+</tr>
+<tr>
+<td>Main output Z</td>
+<td><strong>~600 Ω</strong></td>
+<td>Drives long cables / 600 Ω loads</td>
+</tr>
+<tr>
+<td>Max main output</td>
+<td><strong>~10 V rms</strong></td>
+<td>Service / manual</td>
+</tr>
+<tr>
+<td>S/N (phono, RIAA)</td>
+<td><strong>~80 dB</strong> ref 10 mV</td>
+<td>Spec sheet class</td>
+</tr>
+<tr>
+<td>Tone / filters / selector</td>
+<td><strong>Yes</strong></td>
+<td>Not in GG kit</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://www.rubli.net/classic_amps/files/amps/marantz/7c/specs.htm">Rubli specs</a>, Marantz 7T instruction manual (technical section), 7C service manual.</p>
+<hr>
+<h2>3. Grounded Grid (GG) — what your kit is</h2>
+<h3>Topology</h3>
+<p>Per channel:</p>
+<pre><code>IN ──► [input cathode follower] ──► [grounded-grid gain] ──► [output CF] ── Cout ──► OUT
+</code></pre>
+<ul>
+<li><strong>Non-inverting</strong> end-to-end.</li>
+<li><strong>Grounded grid:</strong> AC signal on cathode; grid held near <strong>AC ground</strong> (critical for noise — see §5).</li>
+</ul>
+<h3>Electrical snapshot</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>GG kit (your docs + clone literature)</th>
+<th>Marantz 7 (high-level path only)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Function</td>
+<td><strong>Line stage only</strong></td>
+<td><strong>Complete preamp</strong></td>
+</tr>
+<tr>
+<td>Voltage gain</td>
+<td><strong>~12 dB</strong> <strong>(lit)</strong> (~×4)</td>
+<td><strong>~22.5 dB</strong> tone stage alone; <strong>~21.5 dB</strong> high-level system gain</td>
+</tr>
+<tr>
+<td>Input Z</td>
+<td><strong>~50 kΩ</strong> <strong>(lit)</strong>; R2/R4 = 10 kΩ on PCB <strong>C</strong> — treat <strong>U</strong> until traced</td>
+<td><strong>~100 kΩ</strong></td>
+</tr>
+<tr>
+<td>Output Z</td>
+<td><strong>~200–300 Ω</strong> <strong>(lit)</strong>; V6 analogue is <strong>~600 Ω</strong></td>
+<td>Different drive philosophy</td>
+</tr>
+<tr>
+<td>Headroom</td>
+<td><strong>±200 V rails</strong> → very high internal swing</td>
+<td>Lower B+, but <strong>10 V</strong> rated output at end</td>
+</tr>
+<tr>
+<td>Phono / EQ / tone</td>
+<td><strong>None</strong></td>
+<td><strong>Core product</strong></td>
+</tr>
+<tr>
+<td>Output coupling</td>
+<td><strong>1.0 µF film</strong> per channel <strong>C</strong></td>
+<td>DC paths + CF at output</td>
+</tr>
+</tbody></table>
+<h3>Gain budget intuition</h3>
+<ul>
+<li>Putting <strong>GG after</strong> a Marantz 7 <strong>main output</strong> would add ~12 dB — usually <strong>too much</strong> unless the Marantz level control is backed off or you only need a buffer substitute experiment.</li>
+<li><strong>GG is not a substitute</strong> for Marantz <strong>V2/V3 phono preamp</strong> (no RIAA, wrong gain structure).</li>
+<li><strong>GG is not a drop-in</strong> for <strong>V5 tone amplifier</strong> (no tone switches, different gain and feedback).</li>
+<li>Closest <strong>functional</strong> analogue in the Marantz is <strong>V6 output cathode follower</strong> — both aim for <strong>low Z</strong> and cable drive — but GG adds <strong>~12 dB gain</strong> and is <strong>AC-coupled</strong>, while V6 includes <strong>level attenuation</strong> and is part of a fixed <strong>21.5 dB</strong> high-level gain budget.</li>
+</ul>
+<hr>
+<h2>4. Where a GG board <em>could</em> sit in a “Marantz-inspired” build</h2>
+<p>Think in <strong>roles</strong>, not silkscreen compatibility.</p>
+<table>
+<thead>
+<tr>
+<th>Idea</th>
+<th>Feasibility</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Faithful Model 7 clone</strong></td>
+<td><strong>Do not use GG as core</strong></td>
+<td>Build Marantz channel/EQ/selector from 7C schematic; GG docs are only background reading.</td>
+</tr>
+<tr>
+<td><strong>External line stage</strong></td>
+<td><strong>Good fit</strong></td>
+<td>GG between any high-level source (DAC, tuner, restored Marantz line out) and power amp — classic Rozenblit use case.</td>
+</tr>
+<tr>
+<td><strong>Replace V6 only</strong></td>
+<td><strong>Poor fit</strong> without redesign</td>
+<td>Gain and level-control mismatch; would need attenuation / different feedback.</td>
+</tr>
+<tr>
+<td><strong>Quiet line buffer reference</strong></td>
+<td><strong>Good fit</strong></td>
+<td>Study GG <strong>CF → GG → CF</strong> and <strong>grounding</strong> when designing your own Marantz output strip.</td>
+</tr>
+<tr>
+<td><strong>Phono front-end</strong></td>
+<td><strong>Wrong tool</strong></td>
+<td>Need 12AX7 MM/MC or op-amp RIAA, not GG.</td>
+</tr>
+</tbody></table>
+<h3>Block diagram: GG as <em>external</em> line stage (Marantz 7 still doing tone/EQ)</h3>
+<pre><code>Source ──► [ Marantz 7: selector → tone → filters → V6 ] ──► (optional) ──► [ GG-PRE ] ──► Power amp
+                └─ ~21.5 dB high-level path ─┘                              └─ +12 dB ─┘
+</code></pre>
+<p>Only sensible if total gain and headroom are planned; often the Marantz output <strong>alone</strong> is enough.</p>
+<h3>Block diagram: Marantz 7 restoration (no GG in signal path)</h3>
+<pre><code>Sources ──► [ Model 7 complete chain ] ──► Power amp
+              GG kit used only as grounding/topology reference in the workshop
+</code></pre>
+<hr>
+<h2>5. Star grounding (deep dive)</h2>
+<p>Clone builders (including the <a href="https://kikitronic.blogspot.com/2009/11/grounded-grid-pre-amplifier.html">Kikitronic GG article</a>) stress grounding as much as the tube circuit. That matches Rozenblit’s grounded-grid line stage: the <strong>grid is at signal ground</strong>, so <strong>where “ground” lives</strong> directly affects hum and buzz.</p>
+<h3>5.1 What “star ground” means here</h3>
+<ul>
+<li><strong>One reference node</strong> (the “star”) is the <strong>only</strong> place where <strong>power returns</strong>, <strong>signal returns</strong>, and <strong>chassis</strong> should meet for <strong>small-signal</strong> purposes.</li>
+<li>Currents from <strong>HV regulation</strong>, <strong>rectifiers</strong>, and <strong>heaters</strong> should <strong>not</strong> share a long PCB trace with <strong>input RCA return</strong> before that point.</li>
+<li><strong>Goal:</strong> keep <strong>IR drop</strong> in ground away from the <strong>input cathode follower</strong> and <strong>grounded-grid</strong> grid reference.</li>
+</ul>
+<p>This is stricter than “solder everything labeled GND together anywhere.”</p>
+<h3>5.2 What Bruce Rozenblit / kit notes recommend (two equivalent methods)</h3>
+<p>From clone documentation (Kikitronic / Transcendent tradition):</p>
+<ol>
+<li><strong>RCA input ground lift resistor:</strong> <strong>10 Ω</strong>, <strong>0.5 W</strong>, from <strong>input connector sleeve</strong> to <strong>chassis</strong> (or to the star), so cable shield currents prefer chassis path while still referencing the audio ground.</li>
+<li><strong>Copper strap:</strong> PCB <strong>GND pad</strong> (often near the <strong>input filter / PSU entry</strong> — kits include a <strong>dedicated hole</strong> for a strap) to <strong>chassis</strong> with a short <strong>wide copper</strong> strip for low inductance.</li>
+</ol>
+<p>Either method is reported to reduce <strong>hum pickup</strong>; builders say little difference between them. Your Zero Zone PCB may not silkscreen the strap hole the same way as Analogmetric — <strong>find the input-side ground pour or power <code>GND</code> terminal</strong> and use the <strong>shortest</strong> chassis tie consistent with a single star.</p>
+<h3>5.3 What your GG-PRE PCB already does <strong>C</strong></h3>
+<p>From reverse-engineering:</p>
+<ul>
+<li><strong>Power terminal <code>GND</code></strong> (pin 4), <strong>IN center</strong>, and <strong>OUT center</strong> tie into a <strong>shared ground pour / spine</strong> on the board (<a href="gg-pre-pcb-reverse-engineering.html">gg-pre-pcb-reverse-engineering.md</a>).</li>
+<li>That is a <strong>PCB-local star/pour</strong>, not yet a <strong>chassis</strong> star until <strong>you</strong> wire it.</li>
+</ul>
+<p><strong>Implied kit practice:</strong> run signal <strong>between boards with twisted pairs or coax</strong>; bring <strong><code>GND</code> from GG-PSU</strong> to <strong>GG-PRE pin 4</strong>; bond <strong>chassis at one point</strong> chosen by you (often near <strong>input</strong> or <strong>PSU</strong>, not both aggressively).</p>
+<h3>5.4 GG-PSU grounding — extra caution <strong>U</strong></h3>
+<p>Photos/docs note unresolved details:</p>
+<ul>
+<li><strong>Filament return</strong> may be <strong>isolated</strong> from <strong>HV return</strong> on some builds until the user bonds them (<a href="gg-psu-pcb-reverse-engineering.html">gg-psu-pcb-reverse-engineering.md</a>).</li>
+<li><strong>±200 V</strong> is formed by strapping <strong>one reg positive</strong> and <strong>the other negative</strong> to <strong>common GND</strong> (<a href="gg-psu-schematic.html">gg-psu-schematic.md</a> §2).</li>
+</ul>
+<p><strong>Practical rule:</strong> after strapping, <strong>one</strong> wire from the <strong>PSU signal/HV reference</strong> to <strong>GG-PRE <code>GND</code></strong>; <strong>one</strong> chassis bond at the star; <strong>avoid</strong> connecting <strong>chassis</strong> at both PSU and preamp through <strong>separate long paths</strong> that parallel the signal cable shield.</p>
+<h3>5.5 Grounded-grid and “AC ground” on the grid</h3>
+<p>On the gain stage, the <strong>grid</strong> must sit at a <strong>clean AC ground</strong> (often direct to the local ground plane with appropriate grid leak — <strong>100 kΩ</strong> class on your OUT strings R13/R14 <strong>C</strong>, grid leaks <strong>I</strong> elsewhere).</p>
+<p>If the <strong>grid reference is noisy</strong> (because rectifier current walked through the same trace as IN GND), hum <strong>modulates</strong> the GG stage even though gain is modest. That is why sellers push <strong>chassis strap at input/PSU</strong> rather than only at the output jacks.</p>
+<h3>5.6 Marantz Model 7 vs GG grounding philosophy</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Classic Marantz 7</strong></th>
+<th><strong>GG clone practice</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Era</td>
+<td>1950s–60s <strong>chassis</strong>, selector switches, long wire harness</td>
+<td>2000s <strong>compact PCB</strong>, external PSU, <strong>RCA blocks</strong></td>
+</tr>
+<tr>
+<td>Returns</td>
+<td>Chassis + power transformer + multiple sub-circuits; restoration guides often <strong>re-star</strong> the whole amp</td>
+<td><strong>Explicit single-point</strong> + <strong>10 Ω</strong> or <strong>copper strap</strong> to chassis</td>
+</tr>
+<tr>
+<td>Heaters</td>
+<td>AC 6.3 V, hum cancellation layout in original</td>
+<td>DC 12 V from <strong>LT1085</strong> on PSU — hum depends on <strong>where filament return</strong> meets star <strong>U</strong> on your PSU</td>
+</tr>
+<tr>
+<td>HV ground</td>
+<td>Single B+ reference</td>
+<td><strong>Bipolar ±200 V</strong> — <strong>GND is midpoint</strong>; symmetry matters for CF biases</td>
+</tr>
+</tbody></table>
+<p>Restoring a <strong>real Marantz 7</strong> still benefits from a <strong>single chassis star</strong>, but the <strong>physical points</strong> follow <strong>7C service manual</strong> grounding, not the GG PCB hole. Use GG notes when <strong>borrowing techniques</strong> (input 10 Ω, short chassis strap), not as a pin-for-pin map.</p>
+<h3>5.7 Suggested bring-up order (GG pair in a chassis)</h3>
+<ol>
+<li><strong>Meter first:</strong> heater pins 4/5/9 vs <code>+12</code> / <code>GND</code>; electrolytic polarity on ± rails; PSU strap for ±200 V (<a href="gg-pre-amp-schematic.html">gg-pre-amp-schematic.md</a> checklist).</li>
+<li><strong>Power up</strong> with <strong>tubes out</strong>; verify <strong>+200 V</strong>, <strong>−200 V</strong>, <strong>+12 V</strong> at <strong>GG-PRE</strong> terminals.</li>
+<li><strong>Identify star point:</strong> e.g. <strong>GG-PSU GND strap terminal</strong> → short wire → <strong>input-side ground</strong> on preamp (not output jacks first).</li>
+<li><strong>Chassis bond:</strong> one <strong>copper strap</strong> or <strong>10 Ω</strong> from <strong>input sleeve net</strong> to chassis per Rozenblit method.</li>
+<li><strong>Signal check:</strong> shorted input, listen for hum; then <strong>single</strong> source with <strong>source chassis</strong> grounded through <strong>one</strong> path (avoid ground loops via PC + amp + second chassis tie).</li>
+</ol>
+<hr>
+<h2>6. Quick comparison table (one glance)</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Marantz Model 7</strong></th>
+<th><strong>GG-PRE (Zero Zone)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Same as Kikitronic blog kit?</td>
+<td><strong>No</strong></td>
+<td><strong>Yes</strong> (same family)</td>
+</tr>
+<tr>
+<td>Tubes</td>
+<td>6× 12AX7</td>
+<td>3× 12AU7</td>
+</tr>
+<tr>
+<td>Line gain (order of)</td>
+<td><strong>~22 dB</strong> (high-level system)</td>
+<td><strong>~12 dB</strong></td>
+</tr>
+<tr>
+<td>Z out main line</td>
+<td><strong>~600 Ω</strong></td>
+<td><strong>~300 Ω</strong> <strong>(lit)</strong></td>
+</tr>
+<tr>
+<td>± HV</td>
+<td>No (classic B+)</td>
+<td><strong>±200 V</strong></td>
+</tr>
+<tr>
+<td>Star ground emphasis</td>
+<td>Implicit in original layout; rebuild guides vary</td>
+<td><strong>Explicit in kit docs</strong> (10 Ω or strap)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Further reading in this repo</h2>
+<table>
+<thead>
+<tr>
+<th>Doc</th>
+<th>Topic</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="gg-pre-amp-schematic.html">gg-pre-amp-schematic.md</a></td>
+<td>GG topology, connectors, assumptions</td>
+</tr>
+<tr>
+<td><a href="gg-pre-component-id.html">gg-pre-component-id.md</a></td>
+<td>R1–R14, Cout, HV caps</td>
+</tr>
+<tr>
+<td><a href="gg-psu-schematic.html">gg-psu-schematic.md</a></td>
+<td>±200 V formation, filament reg</td>
+</tr>
+<tr>
+<td><a href="gg-psu-pcb-reverse-engineering.html">gg-psu-pcb-reverse-engineering.md</a></td>
+<td>PSU star / filament return <strong>U</strong></td>
+</tr>
+</tbody></table>
+<p>External: <a href="https://kikitronic.blogspot.com/2009/11/grounded-grid-pre-amplifier.html">Kikitronic — Grounded Grid Pre-amplifier (2009)</a>.</p>
+<hr>
+<p><a href="index.html">← Project</a></p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>

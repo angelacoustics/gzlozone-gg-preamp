@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marantz 7 Preamp Clone — Project Notes</title>
+  <link rel="stylesheet" href="assets/site.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="assets/site.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html">GG kit build docs</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="BUILD.html">Build guide</a>
+      <a href="marantz-7-vs-gg-reference.html">Star ground</a>
+    </nav>
+  </header>
+  <main class="doc">
+<h1>Marantz 7 Preamp Clone — Project Notes</h1>
+<p>Working folder for <strong>reverse-engineered documentation</strong> of the Zero Zone <strong>GG</strong> kit pair. These boards are <strong>reference material</strong> for a Marantz 7–related project; they are <strong>not</strong> a Marantz 7 circuit.</p>
+<p><strong>Share online (GitHub Pages):</strong> see <a href="GITHUB-PAGES.html">GITHUB-PAGES.md</a>. Regenerated site lives in <a href="./docs/"><code>docs/</code></a> (<code>npm run build:pages</code>).</p>
+<hr>
+<h2>Two boards — two doc sections</h2>
+<table>
+<thead>
+<tr>
+<th>Board</th>
+<th>Role</th>
+<th>Documentation hub</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><a href="gg-pre/index.html">GG-PRE AMP</a></strong></td>
+<td>Stereo tube <strong>line preamp</strong> (3× 12AU7, grounded-grid)</td>
+<td><a href="gg-pre/index.html">gg-pre/README.md</a></td>
+</tr>
+<tr>
+<td><strong><a href="gg-psu/index.html">GG-PSU</a></strong></td>
+<td><strong>±200 V</strong> + filament power supply</td>
+<td><a href="gg-psu/index.html">gg-psu/README.md</a></td>
+</tr>
+</tbody></table>
+<pre><code>  R20-TS4803A trafo (230 V: RED–GRY tied)
+         │
+    GG-PSU ──±200 V, +12, GND──► GG-PRE AMP ──► IN / OUT (stereo)
+</code></pre>
+<p><strong>Step-by-step assembly:</strong> <a href="BUILD.html">BUILD.md</a> (trafo, PSU, preamp, IEC, Alps pot, RCAs, star ground).</p>
+<p>Transformer details: <a href="gg-psu/transformer.html">gg-psu/transformer.md</a> (<strong>NL/EU: 230 V, 50 Hz</strong>, RED–GRY series primary).</p>
+<p><strong>Safety:</strong> ±200 V is lethal. Discharge electrolytics before probing either board.</p>
+<hr>
+<h2>System interconnection (quick)</h2>
+<table>
+<thead>
+<tr>
+<th>GG-PRE power terminal (top→bottom)</th>
+<th>Expected from GG-PSU <strong>I</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>−200V</code></td>
+<td>Negative regulated HV</td>
+</tr>
+<tr>
+<td><code>+12</code></td>
+<td>Filament DC (~12–12.6 V)</td>
+</tr>
+<tr>
+<td><code>+200V</code></td>
+<td>Positive regulated HV</td>
+</tr>
+<tr>
+<td><code>GND</code></td>
+<td>Common</td>
+</tr>
+</tbody></table>
+<p>Preamp connectors and topology: <strong><a href="gg-pre/index.html">GG-PRE docs</a></strong>.<br>PSU strapping and BOM: <strong><a href="gg-psu/index.html">GG-PSU docs</a></strong>.</p>
+<hr>
+<h2>Project-wide files</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><a href="BUILD.html">BUILD.md</a></strong></td>
+<td><strong>Workshop build guide</strong> — phased checklists, wiring, measurements</td>
+</tr>
+<tr>
+<td><a href="./pcb-photos/build/">pcb-photos/build/</a></td>
+<td>Chassis / inlet build progress photos</td>
+</tr>
+<tr>
+<td><a href="marantz-7-vs-gg-reference.html">marantz-7-vs-gg-reference.md</a></td>
+<td>Marantz 7 vs GG kit map, roles, <strong>star grounding</strong></td>
+</tr>
+<tr>
+<td><a href="preferences.html">preferences.md</a></td>
+<td>Where docs are stored, conventions</td>
+</tr>
+<tr>
+<td><a href="./sketches/">sketches/</a></td>
+<td>Hand-drawn–style schematics (user pencil sketch + SVG)</td>
+</tr>
+</tbody></table>
+<p>Board-specific schematics live under <strong>GG-PRE</strong> or <strong>GG-PSU</strong> hubs above.</p>
+<hr>
+<h2>Confidence legend (both boards)</h2>
+<p><strong>C</strong> = confirmed (silkscreen, user measure, part read) · <strong>I</strong> = inferred · <strong>U</strong> = unknown</p>
+<hr>
+<h2>Marantz 7 context</h2>
+<p>This folder documents the <strong>GZLOZONE GG-PRE</strong> + <strong>GG-PSU</strong> clone pair. Use it as a working reference alongside any separate Marantz 7 research—not as a drop-in Marantz 7 schematic.</p>
+<p><strong>Comparison, signal-path roles, and star-ground notes:</strong> <a href="marantz-7-vs-gg-reference.html">marantz-7-vs-gg-reference.md</a> (includes lineage vs <a href="https://kikitronic.blogspot.com/2009/11/grounded-grid-pre-amplifier.html">Kikitronic GG kit</a>).</p>
+
+  </main>
+  <footer class="foot">
+    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
+  </footer>
+</body>
+</html>
