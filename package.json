@@ -1,7 +1,7 @@
 {
-  "name": "marantz-7-preamp-clone",
+  "name": "gzlozone-gg-preamp",
   "version": "1.0.0",
-  "description": "Working folder for **reverse-engineered documentation** of the Zero Zone **GG** kit pair. These boards are **reference material** for a Marantz 7–related project; they are **not** a Marantz 7 circuit.",
+  "description": "GZLOZONE GG Preamp — Rozenblit grounded-grid (GG) line stage + matching PSU (GG-PRE + GG-PSU) build documentation.",
   "main": "index.js",
   "scripts": {
     "build:pages": "node scripts/build-pages.js",

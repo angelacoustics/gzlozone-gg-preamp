@@ -105,7 +105,7 @@ function pageTemplate({ title, bodyHtml, depth }) {
 </head>
 <body>
   <header class="top">
-    <a class="brand" href="${prefix}index.html">GG kit build docs</a>
+    <a class="brand" href="${prefix}index.html">GZLOZONE GG Preamp</a>
     <nav>
       <a href="${prefix}index.html">Home</a>
       <a href="${prefix}BUILD.html">Build guide</a>
@@ -116,7 +116,7 @@ function pageTemplate({ title, bodyHtml, depth }) {
 ${bodyHtml}
   </main>
   <footer class="foot">
-    <p>Zero Zone GG-PRE / GG-PSU workshop notes. ±200 V is lethal — work safely.</p>
+    <p>GZLOZONE GG Preamp — Rozenblit grounded-grid line stage + PSU. ±200 V is lethal — work safely.</p>
     <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
   </footer>
 </body>

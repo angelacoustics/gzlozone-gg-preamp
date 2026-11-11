@@ -1,10 +1,9 @@
 # Publish these docs on GitHub Pages
 
-The static site is generated into the **`docs/`** folder. After you create a **dedicated GitHub account**, follow this once.
+**GZLOZONE GG Preamp** — Rozenblit grounded-grid (GG) line stage + matching PSU.
 
-## 1. Create the account and repo
+The static site is generated into the **`docs/`** folder.
 
-1. Create the new GitHub account in a browser.
 **Repo:** https://github.com/angelacoustics/gzlozone-gg-preamp
 
 ## 2. Build the site locally (after doc edits)

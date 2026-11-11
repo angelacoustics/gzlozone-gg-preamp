@@ -1,6 +1,6 @@
-# Marantz 7 Preamp Clone — Project Notes
+# GZLOZONE GG Preamp
 
-Working folder for **reverse-engineered documentation** of the Zero Zone **GG** kit pair. These boards are **reference material** for a Marantz 7–related project; they are **not** a Marantz 7 circuit.
+**Rozenblit grounded-grid (GG) line stage + matching PSU** — reverse-engineered documentation for the Zero Zone / GZLOZONE **GG-PRE** + **GG-PSU** kit pair. This is **not** a Marantz Model 7 circuit (see [comparison notes](./marantz-7-vs-gg-reference.md) if you want that context).
 
 **Share online (GitHub Pages):** see [GITHUB-PAGES.md](./GITHUB-PAGES.md). Regenerated site lives in [`docs/`](./docs/) (`npm run build:pages`).
 
@@ -61,8 +61,6 @@ Board-specific schematics live under **GG-PRE** or **GG-PSU** hubs above.
 
 ---
 
-## Marantz 7 context
+## Related context (optional)
 
-This folder documents the **GZLOZONE GG-PRE** + **GG-PSU** clone pair. Use it as a working reference alongside any separate Marantz 7 research—not as a drop-in Marantz 7 schematic.
-
-**Comparison, signal-path roles, and star-ground notes:** [marantz-7-vs-gg-reference.md](./marantz-7-vs-gg-reference.md) (includes lineage vs [Kikitronic GG kit](https://kikitronic.blogspot.com/2009/11/grounded-grid-pre-amplifier.html)).
+**Comparison vs Marantz Model 7, signal-path roles, and star-ground notes:** [marantz-7-vs-gg-reference.md](./marantz-7-vs-gg-reference.md) (includes lineage vs [Kikitronic GG kit](https://kikitronic.blogspot.com/2009/11/grounded-grid-pre-amplifier.html)).
