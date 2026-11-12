@@ -117,7 +117,6 @@ ${bodyHtml}
   </main>
   <footer class="foot">
     <p>GZLOZONE GG Preamp — Rozenblit grounded-grid line stage + PSU. ±200 V is lethal — work safely.</p>
-    <p>Public GitHub Pages site · regenerate with <code>npm run build:pages</code></p>
   </footer>
 </body>
 </html>

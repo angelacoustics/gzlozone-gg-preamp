@@ -2,8 +2,6 @@
 
 **Rozenblit grounded-grid (GG) line stage + matching PSU** — reverse-engineered documentation for the Zero Zone / GZLOZONE **GG-PRE** + **GG-PSU** kit pair. This is **not** a Marantz Model 7 circuit (see [comparison notes](./marantz-7-vs-gg-reference.md) if you want that context).
 
-**Share online (GitHub Pages):** see [GITHUB-PAGES.md](./GITHUB-PAGES.md). Regenerated site lives in [`docs/`](./docs/) (`npm run build:pages`).
-
 ---
 
 ## Two boards — two doc sections
